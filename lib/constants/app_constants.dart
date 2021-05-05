@@ -7,7 +7,6 @@ class AppConstants{
     "AB-",
     "B+",
     "B-",
-    "O-"
    // TODO: Add more items to this list
   ];
 

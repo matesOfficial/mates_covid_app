@@ -32,4 +32,8 @@ class DateFormatter {
       return 'Just now';
     }
   }
+
+  static Timestamp convertDateTimeToTimestamp(DateTime dateTime){
+    return Timestamp.fromDate(dateTime);
+  }
 }

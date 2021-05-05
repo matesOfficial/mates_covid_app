@@ -50,7 +50,7 @@ class ThemeUtils {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: primaryColor,
         opacity: 1.0,
       ),
       // Text themes

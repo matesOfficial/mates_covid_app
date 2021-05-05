@@ -1,7 +1,9 @@
+import 'package:covid_app/constants/app_constants.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/home_screen.dart';
 import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
+import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:covid_app/widgets/text_box.dart';
 import 'package:covid_app/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -96,16 +98,21 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                   hintText: "Blood Group",
                   keyboardType: TextInputType.name,
                   readOnly: true,
-                  suffixIcon: Icon(Icons.arrow_drop_down),
+                  onTap: () => _showBloodGroupDialog(context),
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: TextBox(
                   hintText: "MATES Affiliation",
-                  keyboardType: TextInputType.name,
                   readOnly: true,
-                  suffixIcon: Icon(Icons.arrow_drop_down),
+                  onTap: () => _showSelectCollegeDialog(context),
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                  ),
                 ),
               ),
               Padding(
@@ -119,7 +126,10 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                   hintText: "Date of COVID positive report",
                   keyboardType: TextInputType.name,
                   readOnly: true,
-                  suffixIcon: Icon(Icons.date_range),
+                  onTap: () => _selectDate(context),
+                  suffixIcon: Icon(
+                    Icons.date_range,
+                  ),
                 ),
               ),
               Padding(
@@ -138,6 +148,62 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showBloodGroupDialog(BuildContext context) {
+    final UserProfileProvider userProfileProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
+    return showDialog(
+      context: context,
+      builder: (context) => MultiSelectDialog(
+        title: "Select your blood group",
+        children: AppConstants.BLOOD_GROUP_LIST
+            .map(
+              (e) => MultiSelectDialogItem(
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateBloodGroup(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Future<void> _showSelectCollegeDialog(BuildContext context) {
+    final UserProfileProvider userProfileProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
+    return showDialog(
+      context: context,
+      builder: (context) => MultiSelectDialog(
+        title: "Select your college name",
+        children: AppConstants.COLLEGES_LIST
+            .map(
+              (e) => MultiSelectDialogItem(
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateCollegeName(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _onSubmitDetails(

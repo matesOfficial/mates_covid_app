@@ -56,6 +56,16 @@ class UserProfileProvider extends ChangeNotifier{
     notifyListeners();
  }
 
+ void updateBloodGroup(String bloodGroup){
+    this.userProfile.bloodGroup = bloodGroup;
+    notifyListeners();
+ }
+
+ void updateCollegeName(String name){
+    this.userProfile.collegeName = name;
+    notifyListeners();
+ }
+
 
 
 
