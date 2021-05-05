@@ -50,14 +50,14 @@ class ThemeUtils {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: primaryColor,
         opacity: 1.0,
       ),
       // Text themes
       textTheme: TextTheme(
         headline5: TextStyle(fontWeight: FontWeight.w900, color: Colors.black),
         headline6: TextStyle(
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
         subtitle1: TextStyle(

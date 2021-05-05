@@ -5,7 +5,7 @@ import 'package:covid_app/screens/dashboard_reciever.dart';
 import 'package:covid_app/screens/home_screen.dart';
 import 'package:covid_app/screens/loading_screen.dart';
 import 'package:covid_app/screens/login_screen.dart';
-import 'package:covid_app/screens/user_details_screen.dart';
+import 'package:covid_app/screens/plasma_donation_form_screen.dart';
 import 'package:covid_app/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +26,10 @@ class Wrapper extends StatelessWidget {
             }
             UserProfile userProfile = snapshot.data;
             if (userProfile == null) {
-              return UserDetailsScreen();
+              return PlasmaDonationFormScreen();
             }
             if (userProfile.name == null) {
-              return UserDetailsScreen();
+              return PlasmaDonationFormScreen();
             }
              return HomeScreen();
           }
