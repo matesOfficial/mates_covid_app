@@ -1,3 +1,4 @@
+import 'package:covid_app/global.dart';
 import 'package:covid_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,8 +105,12 @@ class AuthService {
   }
 
   static Future<void> updateUserAuthInfo(UserProfile user)async{
-    await _firebaseAuth.currentUser.updateProfile(displayName: user.name);
-    await _firebaseAuth.currentUser.updateEmail(user.email);
+    try {
+      await _firebaseAuth.currentUser.updateProfile(displayName: user.name);
+    }
+    catch (e) {
+      logger.w(e);
+    }
   }
 
 }

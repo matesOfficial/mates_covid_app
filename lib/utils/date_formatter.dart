@@ -33,7 +33,17 @@ class DateFormatter {
     }
   }
 
-  static Timestamp convertDateTimeToTimestamp(DateTime dateTime){
+  static Timestamp convertDateTimeToTimestamp(DateTime dateTime) {
     return Timestamp.fromDate(dateTime);
+  }
+
+  static String formatDate(Timestamp timeStamp) {
+    if (timeStamp == null) {
+      return null;
+    }
+    DateTime userDate = timeStamp.toDate();
+    String date =
+        "${userDate.day} ${DateFormat('MMMM').format(userDate)} ${userDate.year}";
+    return date;
   }
 }

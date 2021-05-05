@@ -13,14 +13,14 @@ import 'package:provider/provider.dart';
 
 // TODO: Make the code for this page a bit cleaner
 
-class PlasmaDonationFormScreen extends StatelessWidget {
+class BloodDonationFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Text Theme
     TextTheme textTheme = Theme.of(context).textTheme;
     // user profile provider
     final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context);
+    Provider.of<UserProfileProvider>(context);
     // user model provider
     final UserModel user = Provider.of<UserModel>(context, listen: false);
     // Text editing controllers
@@ -34,7 +34,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         userProfileProvider.userProfile.bloodGroup ?? "";
     _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
     _dateController.text = DateFormatter.formatDate(
-            userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
+        userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
         "";
 
     return Scaffold(
@@ -47,7 +47,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(top: 48),
                   child: BloodDropLogo(
-                    dropType: "PLASMA",
+                    dropType: "BLOOD",
                   ),
                 ),
               ),
@@ -55,7 +55,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
-                    "Plasma Donor",
+                    "Blood Donor",
                     style: textTheme.headline6,
                   ),
                 ),
@@ -147,7 +147,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                   bottom: 32,
                 ),
                 child: TextBox(
-                  hintText: "Date of COVID positive report",
+                  hintText: "Date of last blood donation",
                   keyboardType: TextInputType.name,
                   readOnly: true,
                   controller: _dateController,
@@ -177,7 +177,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
 
   Future<void> _showBloodGroupDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -185,13 +185,13 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         children: AppConstants.BLOOD_GROUP_LIST
             .map(
               (e) => MultiSelectDialogItem(
-                text: e,
-                onPressed: () {
-                  userProfileProvider.updateBloodGroup(e);
-                  Navigator.pop(context);
-                },
-              ),
-            )
+            text: e,
+            onPressed: () {
+              userProfileProvider.updateBloodGroup(e);
+              Navigator.pop(context);
+            },
+          ),
+        )
             .toList(),
       ),
     );
@@ -199,7 +199,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
 
   Future<void> _showSelectCollegeDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -207,13 +207,13 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         children: AppConstants.COLLEGES_LIST
             .map(
               (e) => MultiSelectDialogItem(
-                text: e,
-                onPressed: () {
-                  userProfileProvider.updateCollegeName(e);
-                  Navigator.pop(context);
-                },
-              ),
-            )
+            text: e,
+            onPressed: () {
+              userProfileProvider.updateCollegeName(e);
+              Navigator.pop(context);
+            },
+          ),
+        )
             .toList(),
       ),
     );
@@ -221,7 +221,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
 
   Future<void> _showSelectCityDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -229,13 +229,13 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         children: AppConstants.CITIES_LIST
             .map(
               (e) => MultiSelectDialogItem(
-                text: e,
-                onPressed: () {
-                  userProfileProvider.updateCityName(e);
-                  Navigator.pop(context);
-                },
-              ),
-            )
+            text: e,
+            onPressed: () {
+              userProfileProvider.updateCityName(e);
+              Navigator.pop(context);
+            },
+          ),
+        )
             .toList(),
       ),
     );
@@ -243,7 +243,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
 
   Future<void> _selectDate(BuildContext context) async {
     final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    Provider.of<UserProfileProvider>(context, listen: false);
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -251,13 +251,13 @@ class PlasmaDonationFormScreen extends StatelessWidget {
       lastDate: DateTime.now(),
     );
     if (picked != null) {
-      userProfileProvider.getLastCovidPositiveDate(picked);
+      userProfileProvider.getLastBloodDonationDate(picked);
     }
   }
 
   Future<void> _onSubmitDetails(
       UserProfileProvider userProfileProvider, BuildContext context) async {
-    if (!userProfileProvider.validatePlasmaForm()) {
+    if (!userProfileProvider.validateBloodDonationForm()) {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter all the details.'),

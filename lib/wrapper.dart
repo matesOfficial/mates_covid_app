@@ -1,12 +1,6 @@
-import 'package:covid_app/global.dart';
 import 'package:covid_app/models/user_model.dart';
-import 'package:covid_app/screens/dashboard_donor.dart';
-import 'package:covid_app/screens/dashboard_reciever.dart';
-import 'package:covid_app/screens/home_screen.dart';
-import 'package:covid_app/screens/loading_screen.dart';
+import 'package:covid_app/screens/donor_receiver_screen.dart';
 import 'package:covid_app/screens/login_screen.dart';
-import 'package:covid_app/screens/plasma_donation_form_screen.dart';
-import 'package:covid_app/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,22 +11,6 @@ class Wrapper extends StatelessWidget {
     if(user.uid == null){
       return LoginScreen();
     }
-      logger.d(user.uid);
-      return FutureBuilder<UserProfile>(
-          future: FirestoreDatabaseService.getUser(user.uid),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return LoadingScreen();
-            }
-            UserProfile userProfile = snapshot.data;
-            if (userProfile == null) {
-              return PlasmaDonationFormScreen();
-            }
-            if (userProfile.name == null) {
-              return PlasmaDonationFormScreen();
-            }
-             return HomeScreen();
-          }
-      );
+    return DonorReceiverScreen();
   }
 }

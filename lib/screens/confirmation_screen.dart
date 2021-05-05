@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Confirmation extends StatefulWidget {
-  const Confirmation({Key key}) : super(key: key);
+class ConfirmationScreen extends StatefulWidget {
+  const ConfirmationScreen({Key key}) : super(key: key);
 
   @override
-  _ConfirmationState createState() => _ConfirmationState();
+  _ConfirmationScreenState createState() => _ConfirmationScreenState();
 }
 
-class _ConfirmationState extends State<Confirmation> {
+class _ConfirmationScreenState extends State<ConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

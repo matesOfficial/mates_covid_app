@@ -30,64 +30,71 @@ class UserModel {
   }
 }
 
-
 class UserProfile {
-  String uid;
   String name;
   String photoUrl;
   String email;
+  String uid;
   String gender;
   String phoneNumber;
   String bloodGroup;
   String city;
-  int pinCode;
+  String pinCode;
   String collegeName;
-  Timestamp dateOfLastBloodDonation;
+  Timestamp lastBloodDonationTimestamp;
   bool isVerifiedPlasmaDonor;
+  bool isVerifiedBloodDonor;
+  Timestamp lastCovidPositiveTimestamp;
 
   UserProfile(
-      {this.uid,
-        this.name,
+      {this.name,
         this.photoUrl,
         this.email,
+        this.uid,
         this.gender,
         this.phoneNumber,
         this.bloodGroup,
         this.city,
         this.pinCode,
         this.collegeName,
-        this.dateOfLastBloodDonation,
-        this.isVerifiedPlasmaDonor});
+        this.lastBloodDonationTimestamp,
+        this.isVerifiedPlasmaDonor,
+        this.isVerifiedBloodDonor,
+        this.lastCovidPositiveTimestamp});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
     name = json['name'];
     photoUrl = json['photo_url'];
     email = json['email'];
+    uid = json['uid'];
     gender = json['gender'];
     phoneNumber = json['phone_number'];
     bloodGroup = json['blood_group'];
     city = json['city'];
     pinCode = json['pin_code'];
     collegeName = json['college_name'];
-    dateOfLastBloodDonation = json['date_of_last_blood_donation'];
+    lastBloodDonationTimestamp = json['last_blood_donation_timestamp'];
     isVerifiedPlasmaDonor = json['is_verified_plasma_donor'];
+    isVerifiedBloodDonor = json['is_verified_blood_donor'];
+    lastCovidPositiveTimestamp = json['last_covid_positive_timestamp'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
     data['name'] = this.name;
     data['photo_url'] = this.photoUrl;
     data['email'] = this.email;
+    data['uid'] = this.uid;
     data['gender'] = this.gender;
     data['phone_number'] = this.phoneNumber;
     data['blood_group'] = this.bloodGroup;
     data['city'] = this.city;
     data['pin_code'] = this.pinCode;
     data['college_name'] = this.collegeName;
-    data['date_of_last_blood_donation'] = this.dateOfLastBloodDonation;
+    data['last_blood_donation_timestamp'] = this.lastBloodDonationTimestamp;
     data['is_verified_plasma_donor'] = this.isVerifiedPlasmaDonor;
+    data['is_verified_blood_donor'] = this.isVerifiedBloodDonor;
+    data['last_covid_positive_timestamp'] = this.lastCovidPositiveTimestamp;
     return data;
   }
 }
