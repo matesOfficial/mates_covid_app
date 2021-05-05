@@ -34,7 +34,7 @@ class BloodDonationFormScreen extends StatelessWidget {
         userProfileProvider.userProfile.bloodGroup ?? "";
     _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
     _dateController.text = DateFormatter.formatDate(
-        userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
+        userProfileProvider.userProfile.lastBloodDonationTimestamp) ??
         "";
 
     return Scaffold(

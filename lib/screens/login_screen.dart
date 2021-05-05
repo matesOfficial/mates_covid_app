@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -34,8 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
             // Header
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 72.0 , bottom: 32),
-                child: Image.asset(ImageConstants.LOGIN_SCREEN_IMAGE_URL),
+                padding: const EdgeInsets.only(top: 72.0, bottom: 32),
+                child: SvgPicture.asset(ImageConstants.LOGIN_SCREEN_IMAGE_URL),
               ),
             ),
             Padding(
