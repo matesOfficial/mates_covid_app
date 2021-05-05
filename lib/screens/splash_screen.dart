@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-/// Navigate to new route after 3 seconds
+  /// Navigate to new route after 3 seconds
   Future<void> push() async {
     var duration = Duration(seconds: 2);
     return Timer(duration, route);
@@ -41,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
+            SvgPicture.asset(
               ImageConstants.LOGO_IMAGE_URL,
               width: 150,
               fit: BoxFit.contain,

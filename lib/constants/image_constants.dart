@@ -1,4 +1,9 @@
+
 class ImageConstants{
+  static const String LOGO_IMAGE_URL = "assets/images/logo.svg";
+  static const String LOGIN_SCREEN_IMAGE_URL = "assets/images/image_1.svg";
+  static const String OTP_SCREEN_IMAGE_URL = "assets/images/image_2.svg";
+  static const String DONOR_RECIEVER_SCREEN_IMAGE_URL = "assets/images/image_3.svg";
   static const String LOGO_IMAGE_URL = "assets/images/logo.png";
   static const String LOGIN_SCREEN_IMAGE_URL = "assets/images/image_1.png";
   static const String OTP_SCREEN_IMAGE_URL = "assets/images/image_2.png";
@@ -11,3 +16,4 @@ class ImageConstants{
   static const String lookingfordonor_mainillustration = "assets/images/lookingfordonor_mainillustration.png";
   
 }
+

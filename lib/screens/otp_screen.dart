@@ -3,6 +3,7 @@ import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/my_pin_input_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class OtpScreen extends StatefulWidget {
   final String verificationId;
@@ -36,7 +37,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 32),
-                child: Image.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
+                child: SvgPicture.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
               ),
             ),
             MyPinInputTextField(onChanged: (pin) {
