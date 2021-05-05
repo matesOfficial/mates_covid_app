@@ -1,5 +1,7 @@
 import 'package:covid_app/global.dart';
 import 'package:covid_app/models/user_model.dart';
+import 'package:covid_app/screens/dashboard_donor.dart';
+import 'package:covid_app/screens/dashboard_reciever.dart';
 import 'package:covid_app/screens/home_screen.dart';
 import 'package:covid_app/screens/loading_screen.dart';
 import 'package:covid_app/screens/login_screen.dart';
@@ -29,7 +31,7 @@ class Wrapper extends StatelessWidget {
             if (userProfile.name == null) {
               return UserDetailsScreen();
             }
-            return HomeScreen();
+             return HomeScreen();
           }
       );
   }

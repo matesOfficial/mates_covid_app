@@ -1,4 +1,5 @@
 import 'package:covid_app/providers/user_profile_provider.dart';
+import 'package:covid_app/screens/confirmation.dart';
 import 'package:covid_app/screens/home_screen.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/my_check_boc.dart';
@@ -81,7 +82,7 @@ class UserDetailsScreen extends StatelessWidget {
                 loadingState: userProfileProvider.isUpdatingUserProfile,
                 disabledState: false,
                 child: Text("Continue"),
-                onPressed: () => _onSubmitDetails(userProfileProvider, context),
+                 onPressed: () => _onSubmitDetails(userProfileProvider, context),
               ),
             ),
           ],
