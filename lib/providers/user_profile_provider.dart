@@ -40,15 +40,25 @@ class UserProfileProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateEmail(String email){
-    this.userProfile.email = email;
+ void updateCity(String city){
+    this.userProfile.city = city;
     notifyListeners();
-  }
+ }
 
-  void updateGender(String gender){
-    this.userProfile.gender = gender;
+ void updatePinCode(int pinCode){
+    this.userProfile.pinCode = pinCode;
     notifyListeners();
-  }
+ }
+
+
+ void updatePhoneNumber(String phoneNumber){
+    this.userProfile.phoneNumber = phoneNumber;
+    notifyListeners();
+ }
+
+
+
+
 
   Future<void> updateUserProfile(String uid)async{
     _isUpdatingUserProfile = true;

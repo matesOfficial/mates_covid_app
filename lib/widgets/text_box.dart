@@ -15,6 +15,7 @@ class TextBox extends StatelessWidget {
   final double height;
   final TextEditingController controller;
   final Icon prefixIcon;
+  final Icon suffixIcon;
   final Function onTap;
   final String initialText;
   final bool readOnly;
@@ -34,6 +35,7 @@ class TextBox extends StatelessWidget {
     this.controller,
     this.height,
     this.readOnly,
+    this.suffixIcon,
     this.initialText,
     this.inputFormatters,
     this.onChanged,
@@ -77,6 +79,7 @@ class TextBox extends StatelessWidget {
           border: InputBorder.none,
           hintText: hintText,
           prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           hintStyle: textFieldHintStyle(context),
           contentPadding: EdgeInsets.only(bottom: 12.0),
         ),
