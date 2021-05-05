@@ -53,6 +53,7 @@ class UserProfileProvider extends ChangeNotifier{
   Future<void> updateUserProfile(String uid)async{
     _isUpdatingUserProfile = true;
     await FirestoreDatabaseService.updateUser(userProfile , uid);
+    // TODO: Add try-catch for handling update auth info errors
     await AuthService.updateUserAuthInfo(userProfile);
     _isUpdatingUserProfile = false;
     notifyListeners();
