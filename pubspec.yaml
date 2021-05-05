@@ -1,0 +1,60 @@
+name: covid_app
+description: A new Flutter application.
+
+
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Utility
+  overlay_support: ^1.2.1
+  logger: ^1.0.0
+  intl: ^0.17.0
+  uuid: ^2.2.2
+  pin_input_text_field: ^4.0.0
+  image_picker: ^0.7.4
+  # state management and dependency injection
+  provider: ^5.0.0
+  get_it: ^6.0.0
+  # firebase
+  firebase_core: ^1.0.1
+  firebase_storage: ^8.0.5
+  firebase_auth: ^1.0.1
+  cloud_firestore: ^1.0.1
+
+
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+
+
+  fonts:
+    - family: TektonPro
+      fonts:
+        - asset: assets/fonts/TektonPro-Regular.otf
+    - family: CentralStation
+      fonts:
+        - asset: assets/fonts/CentralStation.otf
+    - family: Lucida-Sans
+      fonts:
+        - asset: assets/fonts/Lucida-Sans-Italic.ttf
+
+
