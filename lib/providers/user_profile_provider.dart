@@ -7,37 +7,13 @@ import 'package:flutter/material.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   UserProfile userProfile = UserProfile();
-
-  // Private variable to check if the user stream is currently in loading state
-  bool _isUserStreamLoading = true;
-
-  // Getter for user stream
-  bool get isUserStreamLoading => _isUserStreamLoading;
-
   // private variable to check if the process to update to db is complete.
   bool _isUpdatingUserProfile = false;
 
   // Getter for user profile loading variable
   bool get isUpdatingUserProfile => _isUpdatingUserProfile;
 
-  UserProfileProvider() {
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      if (user == null || user.uid == null) {
-        // User is not logged in
-        userProfile = null;
-        notifyListeners();
-        return;
-      }
 
-      // Stream user detail, update data when receive new data
-      FirestoreDatabaseService.streamUser(user.uid).listen((event) {
-        userProfile = event;
-        // Initialize preferred books array
-        _isUserStreamLoading = false;
-        notifyListeners();
-      });
-    });
-  }
 
   /// Functions to get user details as input
 

@@ -65,8 +65,7 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         _loadingState = true;
       });
-      bool _isValidOtp =
-          await AuthService.verifyOTP(widget.verificationId, pin);
+      bool _isValidOtp =  await AuthService.verifyOTP(widget.verificationId, pin);
       setState(() {
         _loadingState = false;
       });

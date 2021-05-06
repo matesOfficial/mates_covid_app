@@ -1,5 +1,6 @@
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/screens/blood_donation_form_screen.dart';
+import 'package:covid_app/screens/oxygen_donation_form_screen.dart';
 import 'package:covid_app/screens/plasma_donation_form_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -129,23 +130,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: Color(0xffFFFFFF),
-                      child: Column(
-                        children: [
-                          Padding(padding: EdgeInsets.all(10.0)),
-                          Image.asset(
-                            ImageConstants.oxygen_cylinder,
-                            width: 80,
-                            fit: BoxFit.contain,
+                  GestureDetector(
+                    onTap: (){
+                      if (widget.userType == "DONOR") {
+                        return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OxygenDonationFormScreen(),
                           ),
-                          Padding(padding: EdgeInsets.all(10.0)),
-                          Text("Oxygen"),
-                        ],
-                      )),
+                        );
+                      }
+                    },
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        color: Color(0xffFFFFFF),
+                        child: Column(
+                          children: [
+                            Padding(padding: EdgeInsets.all(10.0)),
+                            Image.asset(
+                              ImageConstants.oxygen_cylinder,
+                              width: 80,
+                              fit: BoxFit.contain,
+                            ),
+                            Padding(padding: EdgeInsets.all(10.0)),
+                            Text("Oxygen"),
+                          ],
+                        )),
+                  ),
                   Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),

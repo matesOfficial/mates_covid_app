@@ -1,8 +1,7 @@
 import 'package:covid_app/constants/app_constants.dart';
+import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/confirmation_screen.dart';
-import 'package:covid_app/utils/date_formatter.dart';
-import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:covid_app/widgets/text_box.dart';
@@ -13,7 +12,7 @@ import 'package:provider/provider.dart';
 
 // TODO: Make the code for this page a bit cleaner
 
-class BloodDonationFormScreen extends StatelessWidget {
+class OxygenDonationFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Text Theme
@@ -24,18 +23,12 @@ class BloodDonationFormScreen extends StatelessWidget {
     // user model provider
     final UserModel user = Provider.of<UserModel>(context, listen: false);
     // Text editing controllers
-    TextEditingController _cityController = TextEditingController();
-    TextEditingController _bloodGroupController = TextEditingController();
+    TextEditingController _oxygenUtiilityController = TextEditingController();
     TextEditingController _collegeController = TextEditingController();
-    TextEditingController _dateController = TextEditingController();
     // Set text for controllers
-    _cityController.text = userProfileProvider.userProfile.city ?? "";
-    _bloodGroupController.text =
+    _oxygenUtiilityController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
     _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
-    _dateController.text = DateFormatter.formatDate(
-        userProfileProvider.userProfile.lastBloodDonationTimestamp) ??
-        "";
 
     return Scaffold(
       body: SafeArea(
@@ -46,8 +39,10 @@ class BloodDonationFormScreen extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 48),
-                  child: BloodDropLogo(
-                    dropType: "BLOOD",
+                  child: Image.asset(
+                    ImageConstants.oxygen_cylinder,
+                    width: 80,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -55,13 +50,29 @@ class BloodDonationFormScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
-                    "Blood Donor",
+                    "Oxygen Donor",
                     style: textTheme.headline6,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 32, 32, 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 32,
+                ),
+                child: TextBox(
+                  hintText: "What do you want to donate?",
+                  keyboardType: TextInputType.name,
+                  controller: _oxygenUtiilityController,
+                  readOnly: true,
+                  onTap: () => _showBloodGroupDialog(context),
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 32, 32, 16),
                 child: TextBox(
                   hintText: "Name",
                   textCapitalization: TextCapitalization.words,
@@ -90,7 +101,6 @@ class BloodDonationFormScreen extends StatelessWidget {
                 child: TextBox(
                   hintText: "City",
                   readOnly: true,
-                  controller: _cityController,
                   onTap: () => _showSelectCityDialog(context),
                   suffixIcon: Icon(
                     Icons.arrow_drop_down,
@@ -119,7 +129,7 @@ class BloodDonationFormScreen extends StatelessWidget {
                 child: TextBox(
                   hintText: "Blood Group",
                   keyboardType: TextInputType.name,
-                  controller: _bloodGroupController,
+                  controller: _oxygenUtiilityController,
                   readOnly: true,
                   onTap: () => _showBloodGroupDialog(context),
                   suffixIcon: Icon(
@@ -139,24 +149,7 @@ class BloodDonationFormScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 32,
-                  right: 32,
-                  bottom: 32,
-                ),
-                child: TextBox(
-                  hintText: "Date of last blood donation",
-                  keyboardType: TextInputType.name,
-                  readOnly: true,
-                  controller: _dateController,
-                  onTap: () => _selectDate(context),
-                  suffixIcon: Icon(
-                    Icons.date_range,
-                  ),
-                ),
-              ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: BottomButton(
@@ -238,19 +231,7 @@ class BloodDonationFormScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      userProfileProvider.getLastBloodDonationDate(picked);
-    }
-  }
+
 
   Future<void> _onSubmitDetails(
       UserProfileProvider userProfileProvider, BuildContext context) async {
