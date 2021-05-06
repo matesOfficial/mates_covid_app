@@ -37,4 +37,11 @@ class FirestoreDatabaseService {
     return UserProfile.fromJson(data.data());
   }
 
+  /// Create a new user profile in db
+  static Future<void> createNewUserProfile(UserProfile newUser) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(newUser.uid)
+        .set(newUser.toJson());
+  }
 }

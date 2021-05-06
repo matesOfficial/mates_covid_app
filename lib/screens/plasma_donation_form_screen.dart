@@ -1,19 +1,39 @@
 import 'package:covid_app/constants/app_constants.dart';
+import 'package:covid_app/global.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
-import 'package:covid_app/screens/confirmation_screen.dart';
+import 'package:covid_app/screens/otp_screen.dart';
+import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/utils/date_formatter.dart';
 import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:covid_app/widgets/text_box.dart';
 import 'package:covid_app/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:covid_app/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Make the code for this page a bit cleaner
 
-class PlasmaDonationFormScreen extends StatelessWidget {
+class PlasmaDonationFormScreen extends StatefulWidget {
+  @override
+  _PlasmaDonationFormScreenState createState() =>
+      _PlasmaDonationFormScreenState();
+}
+
+class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
+  // loading state variable
+  bool _isLoading = false;
+
+  // Text editing controllers
+  TextEditingController _cityController = TextEditingController();
+  TextEditingController _bloodGroupController = TextEditingController();
+  TextEditingController _collegeController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // Text Theme
@@ -21,13 +41,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
     // user profile provider
     final UserProfileProvider userProfileProvider =
         Provider.of<UserProfileProvider>(context);
-    // user model provider
-    final UserModel user = Provider.of<UserModel>(context, listen: false);
-    // Text editing controllers
-    TextEditingController _cityController = TextEditingController();
-    TextEditingController _bloodGroupController = TextEditingController();
-    TextEditingController _collegeController = TextEditingController();
-    TextEditingController _dateController = TextEditingController();
+
     // Set text for controllers
     _cityController.text = userProfileProvider.userProfile.city ?? "";
     _bloodGroupController.text =
@@ -36,7 +50,6 @@ class PlasmaDonationFormScreen extends StatelessWidget {
     _dateController.text = DateFormatter.formatDate(
             userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
         "";
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -102,7 +115,6 @@ class PlasmaDonationFormScreen extends StatelessWidget {
                 child: TextBox(
                   hintText: "Phone Number",
                   keyboardType: TextInputType.phone,
-                  initialText: user.phoneNumber,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
@@ -160,7 +172,7 @@ class PlasmaDonationFormScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: BottomButton(
-                  loadingState: userProfileProvider.isUpdatingUserProfile,
+                  loadingState: _isLoading,
                   disabledState: false,
                   child: Text("Continue"),
                   onPressed: () =>
@@ -265,14 +277,59 @@ class PlasmaDonationFormScreen extends StatelessWidget {
         ),
       );
     }
-    final UserModel user = Provider.of<UserModel>(context, listen: false);
-    await userProfileProvider.updateUserProfile(user.uid);
-    userProfileProvider.resetProvider();
-    return Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ConfirmationScreen(),
-      ),
+    setState(() {
+      _isLoading = true;
+    });
+
+    /// OTP verification method
+    return AuthService.signInWithPhone(
+      "${userProfileProvider.userProfile.phoneNumber}",
+
+      /// Callbacks
+      onAutoPhoneVerificationCompleted: (AuthCredential credential) {},
+
+      /// Fired when auto phone verification gets failed
+      onPhoneVerificationFailed: (FirebaseAuthException e) {
+        logger.w(e.message);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AuthService.getMessageFromErrorCode(e.code)),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      },
+
+      /// Fired when the code is sent from server
+      onPhoneCodeSent: (String verificationId, [int forceCodeResend]) async {
+        // turn off the loading state of button upon successful login
+        setState(() {
+          _isLoading = false;
+        });
+        // Go to OTP screen to input the OTP and verify if entered OTP was correct
+        bool _isOtpValid = await Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(
+              verificationId: verificationId,
+              fromDonorScreen: true,
+            ),
+          ),
+        );
+        logger..d(_isOtpValid);
+        //  If entered OTP is valid
+        if (_isOtpValid == true) {
+          Navigator.pushNamedAndRemoveUntil(context, '/confirmation_screen' , (route) => false);
+        }
+        // Display error message in case of invalid OTP.
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("The entered OTP is invalid."),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        }
+      },
     );
   }
 }

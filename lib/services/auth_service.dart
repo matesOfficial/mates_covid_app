@@ -57,6 +57,34 @@ class AuthService {
     return false;
   }
 
+  /// Verify after fetching the OTP ( for donors pages )
+  static Future<bool> verifyOtpForDonors(String verificationId, String otp , UserProfile userProfile) async {
+    AuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otp,
+    );
+    UserCredential result;
+    try {
+      result = await _firebaseAuth.signInWithCredential(credential);
+    } catch (e) {
+      // throw e;
+      return false;
+    }
+
+    if (result.user.uid != null) {
+      userProfile.uid = result.user.uid;
+      if (result.additionalUserInfo.isNewUser) {
+        // Add the information of newly created user to database.
+        FirestoreDatabaseService.createNewUserProfile(userProfile);
+      }
+      else{
+        FirestoreDatabaseService.updateUser(userProfile, userProfile.uid);
+      }
+      return true;
+    }
+    return false;
+  }
+
   static Future<void> logOut() async {
     if (_firebaseAuth.currentUser != null) {
       await _firebaseAuth.signOut();

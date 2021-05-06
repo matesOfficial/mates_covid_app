@@ -8,6 +8,7 @@ class ConfirmationScreen extends StatefulWidget {
 }
 
 class _ConfirmationScreenState extends State<ConfirmationScreen> {
+  // TODO: Change the UI for this screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
             SizedBox(height: 250.0,),
             ElevatedButton(
               onPressed: (){
-                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(context, '/wrapper', (route) => false);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

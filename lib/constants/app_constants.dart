@@ -26,4 +26,9 @@ class AppConstants{
    // TODO : May change this later
  ];
 
+ static const List<String> OXYGEN_UTILITIES_LIST = [
+   "Oxygen Cylinders",
+   "Oxygen Concentrators"
+ ];
+
 }
