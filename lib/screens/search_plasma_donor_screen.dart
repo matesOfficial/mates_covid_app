@@ -45,14 +45,22 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
         centerTitle: true,
         title: Text("Plasma Donors"),
       ),
+      // TODO: Re-factor this code, shift firebase query to database services
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
             .where('is_verified_plasma_donor', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor),
+              ),
+            );
+          }
           var snapshotData = snapshot.data.docs;
-
           print(snapshotData);
           List<UserProfile> userProfiles = List.from(snapshotData.map((doc) {
             return UserProfile.fromJson(doc.data());

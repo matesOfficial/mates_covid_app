@@ -23,10 +23,10 @@ class OxygenDonationFormScreen extends StatelessWidget {
     // user model provider
     final UserModel user = Provider.of<UserModel>(context, listen: false);
     // Text editing controllers
-    TextEditingController _oxygenUtiilityController = TextEditingController();
+    TextEditingController _oxygenUtilityController = TextEditingController();
     TextEditingController _collegeController = TextEditingController();
     // Set text for controllers
-    _oxygenUtiilityController.text =
+    _oxygenUtilityController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
     _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
 
@@ -63,7 +63,7 @@ class OxygenDonationFormScreen extends StatelessWidget {
                 child: TextBox(
                   hintText: "What do you want to donate?",
                   keyboardType: TextInputType.name,
-                  controller: _oxygenUtiilityController,
+                  controller: _oxygenUtilityController,
                   readOnly: true,
                   onTap: () => _showBloodGroupDialog(context),
                   suffixIcon: Icon(
@@ -129,7 +129,7 @@ class OxygenDonationFormScreen extends StatelessWidget {
                 child: TextBox(
                   hintText: "Blood Group",
                   keyboardType: TextInputType.name,
-                  controller: _oxygenUtiilityController,
+                  controller: _oxygenUtilityController,
                   readOnly: true,
                   onTap: () => _showBloodGroupDialog(context),
                   suffixIcon: Icon(
