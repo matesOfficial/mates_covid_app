@@ -1,8 +1,8 @@
+import 'package:covid_app/global.dart';
 import 'package:covid_app/models/user_model.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/services/database_service.dart';
 import 'package:covid_app/utils/date_formatter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileProvider extends ChangeNotifier {
@@ -33,7 +33,7 @@ class UserProfileProvider extends ChangeNotifier {
   }
 
   void updatePhoneNumber(String phoneNumber) {
-    this.userProfile.phoneNumber = phoneNumber;
+    this.userProfile.phoneNumber = "+91$phoneNumber";
     notifyListeners();
   }
 
@@ -69,13 +69,15 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.city == null ||
         userProfile.pinCode == null ||
         userProfile.phoneNumber == null ||
-        userProfile.phoneNumber.length < 13 ||
+        userProfile.phoneNumber.length < 10 ||
         userProfile.bloodGroup == null ||
         userProfile.collegeName == null ||
         userProfile.lastCovidPositiveTimestamp == null) {
+      logger.i(userProfile.toJson());
       return false;
     }
     if (userProfile.pinCode.length < 6) {
+      logger.i(userProfile.toJson());
       return false;
     }
     this.userProfile.isVerifiedPlasmaDonor = true;
@@ -88,7 +90,7 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.city == null ||
         userProfile.pinCode == null ||
         userProfile.phoneNumber == null ||
-        userProfile.phoneNumber.length < 13 ||
+        userProfile.phoneNumber.length < 10 ||
         userProfile.bloodGroup == null ||
         userProfile.collegeName == null ||
         userProfile.lastCovidPositiveTimestamp == null) {

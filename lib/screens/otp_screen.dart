@@ -1,14 +1,17 @@
 import 'package:covid_app/constants/image_constants.dart';
+import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/my_pin_input_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class OtpScreen extends StatefulWidget {
   final String verificationId;
+  final bool fromDonorScreen;
 
-  OtpScreen({@required this.verificationId});
+  OtpScreen({@required this.verificationId, this.fromDonorScreen});
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -61,15 +64,35 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Future<void> onEditingComplete(BuildContext context, String pin) async {
-    if (pin.length == 6) {
-      setState(() {
-        _loadingState = true;
-      });
-      bool _isValidOtp =  await AuthService.verifyOTP(widget.verificationId, pin);
-      setState(() {
-        _loadingState = false;
-      });
-      return Navigator.pop(context, _isValidOtp);
+    // Donor OTP verification
+    if (widget.fromDonorScreen == true) {
+      if (pin.length == 6) {
+        setState(() {
+          _loadingState = true;
+        });
+        final UserProfileProvider userProfileProvider =
+            Provider.of<UserProfileProvider>(context, listen: false);
+        bool _isValidOtp = await AuthService.verifyOtpForDonors(
+            widget.verificationId, pin, userProfileProvider.userProfile);
+        setState(() {
+          _loadingState = false;
+        });
+        return Navigator.pop(context, _isValidOtp);
+      }
+    }
+    // Normal OTP verification
+    else {
+      if (pin.length == 6) {
+        setState(() {
+          _loadingState = true;
+        });
+        bool _isValidOtp =
+            await AuthService.verifyOTP(widget.verificationId, pin);
+        setState(() {
+          _loadingState = false;
+        });
+        return Navigator.pop(context, _isValidOtp);
+      }
     }
   }
 }

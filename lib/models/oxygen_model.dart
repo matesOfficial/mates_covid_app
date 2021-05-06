@@ -5,8 +5,7 @@ class OxygenModel {
   String city;
   int pinCode;
 
-  OxygenModel(
-      {this.supplyType, this.donorId, this.quantity, this.city, this.pinCode});
+  OxygenModel({this.supplyType, this.donorId, this.quantity, this.city, this.pinCode});
 
   OxygenModel.fromJson(Map<String, dynamic> json) {
     supplyType = json['supply_type'];

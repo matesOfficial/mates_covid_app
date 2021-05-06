@@ -14,4 +14,9 @@ class NavigationService {
   void pushWrapperAndRemoveAllRoutes(){
     navigatorKey.currentState.pushNamedAndRemoveUntil( '/wrapper',(route) => false);
   }
+
+  void pushConfirmationAndRemoveAllRoutes(){
+    navigatorKey.currentState.pushNamedAndRemoveUntil( '/confirmation_screen',(route) => false);
+  }
+
 }
