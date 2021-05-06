@@ -22,9 +22,8 @@ class ThemeUtils {
           ),
         ),
       ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primaryColor
-      ),
+      floatingActionButtonTheme:
+          FloatingActionButtonThemeData(backgroundColor: primaryColor),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
         elevation: 5.0,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:covid_app/widgets/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,7 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
             .where('is_verified_plasma_donor', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
@@ -95,105 +96,9 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 itemCount: userProfiles.length,
                 itemBuilder: (context, index) {
                   UserProfile user = userProfiles[index];
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Card(
-                      color: Colors.white,
-                      elevation: 1,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    user.name,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    user.city,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                                if (user.lastBloodDonationTimestamp != null)
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Date of last donation :",
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                if (user.lastCovidPositiveTimestamp != null)
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Date of covid positive report :",
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Phone No.",
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "Blood Group : ${user.bloodGroup}",
-                                      textAlign: TextAlign.right),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(user.pinCode,
-                                      textAlign: TextAlign.right),
-                                ),
-                                if (user.lastBloodDonationTimestamp != null)
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        user.lastBloodDonationTimestamp
-                                            .toDate()
-                                            .toLocal()
-                                            .toString()
-                                            .split(' ')[0],
-                                        textAlign: TextAlign.right),
-                                  ),
-                                if (user.lastCovidPositiveTimestamp != null)
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        user.lastCovidPositiveTimestamp
-                                            .toDate()
-                                            .toLocal()
-                                            .toString()
-                                            .split(' ')[0],
-                                        textAlign: TextAlign.right),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(user.phoneNumber.toString(),
-                                      textAlign: TextAlign.right),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  return CustomListCard(
+                    user: user,
+                    isPlasma: true,
                   );
                 },
               ),

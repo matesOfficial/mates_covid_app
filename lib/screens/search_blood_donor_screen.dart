@@ -6,6 +6,7 @@ import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/text_box.dart';
+import '../widgets/custom_list_tile.dart';
 
 class SearchBloodDonorScreen extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class SearchBloodDonorScreen extends StatefulWidget {
 
 class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
   TextEditingController _cityController = TextEditingController();
+
   String selectedCity = '';
   Future<void> _showSelectCityDialog(BuildContext context) {
     return showDialog(
@@ -52,7 +54,7 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
             .where('is_verified_blood_donor', isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(
                 valueColor: new AlwaysStoppedAnimation<Color>(
@@ -98,209 +100,14 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
 
                   if (selectedCity.toLowerCase() == user.city.toLowerCase()) {
                     print('Here0');
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 1,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      user.name,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      user.city,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  if (user.lastBloodDonationTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Date of last donation :",
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  if (user.lastCovidPositiveTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Date of covid positive report :",
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Phone No.",
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        "Blood Group : ${user.bloodGroup}",
-                                        textAlign: TextAlign.right),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(user.pinCode,
-                                        textAlign: TextAlign.right),
-                                  ),
-                                  if (user.lastBloodDonationTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          user.lastBloodDonationTimestamp
-                                              .toDate()
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[0],
-                                          textAlign: TextAlign.right),
-                                    ),
-                                  if (user.lastCovidPositiveTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          user.lastCovidPositiveTimestamp
-                                              .toDate()
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[0],
-                                          textAlign: TextAlign.right),
-                                    ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(user.phoneNumber.toString(),
-                                        textAlign: TextAlign.right),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
+                    return CustomListCard(user: user);
                   }
 
                   if (selectedCity == '') {
                     print("here1");
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 1,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      user.name,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      user.city,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  if (user.lastBloodDonationTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Date of last donation :",
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  if (user.lastCovidPositiveTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Date of covid positive report :",
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "Phone No.",
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        "Blood Group : ${user.bloodGroup}",
-                                        textAlign: TextAlign.right),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(user.pinCode,
-                                        textAlign: TextAlign.right),
-                                  ),
-                                  if (user.lastBloodDonationTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          user.lastBloodDonationTimestamp
-                                              .toDate()
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[0],
-                                          textAlign: TextAlign.right),
-                                    ),
-                                  if (user.lastCovidPositiveTimestamp != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          user.lastCovidPositiveTimestamp
-                                              .toDate()
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[0],
-                                          textAlign: TextAlign.right),
-                                    ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(user.phoneNumber.toString(),
-                                        textAlign: TextAlign.right),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    return CustomListCard(
+                      user: user,
+                      isPlasma: false,
                     );
                   }
                   print("here 3");
@@ -314,3 +121,5 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
     );
   }
 }
+
+class CustomListTile {}
