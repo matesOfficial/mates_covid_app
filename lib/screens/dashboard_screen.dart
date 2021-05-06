@@ -1,6 +1,8 @@
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/screens/blood_donation_form_screen.dart';
 import 'package:covid_app/screens/plasma_donation_form_screen.dart';
+import 'package:covid_app/screens/search_blood_donor_screen.dart';
+import 'package:covid_app/screens/search_plasma_donor_screen.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -79,6 +81,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                       }
+                      if (widget.userType == "RECEIVER") {
+                        return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SearchBloodDonorScreen(),
+                          ),
+                        );
+                      }
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -106,6 +116,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PlasmaDonationFormScreen(),
+                          ),
+                        );
+                      }
+                      if (widget.userType == "RECEIVER") {
+                        return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SearchPlasmaDonorScreen(),
                           ),
                         );
                       }
