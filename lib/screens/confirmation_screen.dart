@@ -1,3 +1,5 @@
+import 'package:covid_app/constants/image_constants.dart';
+import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationScreen extends StatefulWidget {
@@ -8,33 +10,45 @@ class ConfirmationScreen extends StatefulWidget {
 }
 
 class _ConfirmationScreenState extends State<ConfirmationScreen> {
-  // TODO: Change the UI for this screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-          children: [
-            SizedBox(height: 250.0,),
-            Center(child: Image.asset("assets/images/Frametickmark.png")),
-            SizedBox(height: 30.0,),
-            Text("Thanks For Sharing The Details." , style: TextStyle(fontSize: 20.0),),
-            Text("You Are Successfully Registered As A Donor." , style: TextStyle(fontSize: 20.0),),
-            Text("We’ll Get Back To You!" , style: TextStyle(fontSize: 20.0),),
-            SizedBox(height: 250.0,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.pushNamedAndRemoveUntil(context, '/wrapper', (route) => false);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0)
-                ),
-                minimumSize: Size(350.0,50.0),
-              ),
-              child: Text("Return To Home" , style: TextStyle(fontSize: 25.0 , color: Colors.white),),
-            )
-          ],
-        )
-    );
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Spacer(),
+        Center(
+          child: Image.asset(
+            ImageConstants.CONFIRMATION_SCREEN_IMAGE_URL,
+          ),
+        ),
+        SizedBox(
+          height: 16.0,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Text(
+            "Thank you for sharing these details with us",
+            style: Theme.of(context).textTheme.subtitle1,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Spacer(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: BottomButton(
+            loadingState: false,
+            disabledState: false,
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/wrapper", (route) => false);
+            },
+            child: Text("Return to home screen"),
+          ),
+        ),
+        SizedBox(height: 32)
+      ],
+    ));
   }
 }

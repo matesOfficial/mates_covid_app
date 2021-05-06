@@ -6,6 +6,7 @@ class ImageConstants{
   static const String DONOR_RECIEVER_SCREEN_IMAGE_URL = "assets/images/image_3.svg";
   static const String DONOR_RECEIVER_SCREEN_IMAGE_URL = "assets/images/image_3.png";
   static const String BLOOD_DROP_IMAGE_URL = "assets/images/blood_drop.svg";
+  static const String CONFIRMATION_SCREEN_IMAGE_URL = "assets/images/Frametickmark.png";
 
   static const String blood_drop = "assets/images/blood-drop.png";
   static const String plasma_drop = "assets/images/plasma-drop.png";

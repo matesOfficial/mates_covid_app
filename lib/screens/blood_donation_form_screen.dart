@@ -113,7 +113,6 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
                 child: TextBox(
                   hintText: "Phone Number",
                   keyboardType: TextInputType.phone,
-                  initialText: user.phoneNumber,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),

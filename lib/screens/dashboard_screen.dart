@@ -150,14 +150,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      if (widget.userType == "DONOR") {
-                        return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OxygenDonationFormScreen(),
-                          ),
-                        );
-                      }
+                      // if (widget.userType == "DONOR") {
+                      //   return Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => OxygenDonationFormScreen(),
+                      //     ),
+                      //   );
+                      // }
                     },
                     child: Card(
                         shape: RoundedRectangleBorder(

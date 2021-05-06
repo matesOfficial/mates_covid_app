@@ -1,6 +1,7 @@
 import 'package:covid_app/models/user_model.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/confirmation_screen.dart';
+import 'package:covid_app/screens/search_blood_donor_screen.dart';
 import 'package:covid_app/screens/splash_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/services/navigation_service.dart';
@@ -37,7 +38,7 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: "Covid App",
           theme: ThemeUtils.defaultAppThemeData,
-          home: SplashScreen(),
+          home: SearchBloodDonorScreen(),
           // Important routes
           routes: {
             '/wrapper': (context) => Wrapper(),
