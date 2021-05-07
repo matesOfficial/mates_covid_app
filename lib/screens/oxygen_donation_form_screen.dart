@@ -28,7 +28,7 @@ class OxygenDonationFormScreen extends StatelessWidget {
     // Set text for controllers
     _oxygenUtilityController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
-    _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
+    _collegeController.text = userProfileProvider.userProfile.matesAffiliation ?? "";
 
     return Scaffold(
       body: SafeArea(
@@ -196,7 +196,7 @@ class OxygenDonationFormScreen extends StatelessWidget {
       context: context,
       builder: (context) => MultiSelectDialog(
         title: "Select your college name",
-        children: AppConstants.COLLEGES_LIST
+        children: AppConstants.MATES_AFFILIATION_LIST
             .map(
               (e) => MultiSelectDialogItem(
             text: e,

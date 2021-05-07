@@ -40,7 +40,7 @@ class UserProfile {
   String bloodGroup;
   String city;
   String pinCode;
-  String collegeName;
+  String matesAffiliation;
   Timestamp lastBloodDonationTimestamp;
   bool isVerifiedPlasmaDonor;
   bool isVerifiedBloodDonor;
@@ -56,7 +56,7 @@ class UserProfile {
         this.bloodGroup,
         this.city,
         this.pinCode,
-        this.collegeName,
+        this.matesAffiliation,
         this.lastBloodDonationTimestamp,
         this.isVerifiedPlasmaDonor,
         this.isVerifiedBloodDonor,
@@ -72,7 +72,7 @@ class UserProfile {
     bloodGroup = json['blood_group'];
     city = json['city'];
     pinCode = json['pin_code'];
-    collegeName = json['college_name'];
+    matesAffiliation = json['mates_affiliation'];
     lastBloodDonationTimestamp = json['last_blood_donation_timestamp'];
     isVerifiedPlasmaDonor = json['is_verified_plasma_donor'];
     isVerifiedBloodDonor = json['is_verified_blood_donor'];
@@ -90,7 +90,7 @@ class UserProfile {
     data['blood_group'] = this.bloodGroup;
     data['city'] = this.city;
     data['pin_code'] = this.pinCode;
-    data['college_name'] = this.collegeName;
+    data['mates_affiliation'] = this.matesAffiliation;
     data['last_blood_donation_timestamp'] = this.lastBloodDonationTimestamp;
     data['is_verified_plasma_donor'] = this.isVerifiedPlasmaDonor;
     data['is_verified_blood_donor'] = this.isVerifiedBloodDonor;

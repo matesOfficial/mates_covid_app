@@ -46,7 +46,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
     _cityController.text = userProfileProvider.userProfile.city ?? "";
     _bloodGroupController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
-    _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
+    _collegeController.text = userProfileProvider.userProfile.matesAffiliation ?? "";
     _dateController.text = DateFormatter.formatDate(
             userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
         "";
@@ -222,7 +222,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
       context: context,
       builder: (context) => MultiSelectDialog(
         title: "Select your college name",
-        children: AppConstants.COLLEGES_LIST
+        children: AppConstants.MATES_AFFILIATION_LIST
             .map(
               (e) => MultiSelectDialogItem(
                 text: e,

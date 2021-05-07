@@ -43,7 +43,7 @@ class UserProfileProvider extends ChangeNotifier {
   }
 
   void updateCollegeName(String name) {
-    this.userProfile.collegeName = name;
+    this.userProfile.matesAffiliation = name;
     notifyListeners();
   }
 
@@ -71,7 +71,7 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.phoneNumber == null ||
         userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
-        userProfile.collegeName == null ||
+        userProfile.matesAffiliation == null ||
         userProfile.lastCovidPositiveTimestamp == null) {
       return false;
     }
@@ -90,7 +90,7 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.phoneNumber == null ||
         userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
-        userProfile.collegeName == null ||
+        userProfile.matesAffiliation == null ||
         userProfile.lastBloodDonationTimestamp == null) {
       return false;
     }
