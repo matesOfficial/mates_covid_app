@@ -1,5 +1,6 @@
 import 'package:covid_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class FirestoreDatabaseService {
   /// Firestore instance variable
@@ -43,5 +44,28 @@ class FirestoreDatabaseService {
         .collection('users')
         .doc(newUser.uid)
         .set(newUser.toJson());
+  }
+
+  static Stream<QuerySnapshot> streamDonors(
+      {String city, String pinCode, @required String donorType}) {
+    if (city != null && pinCode == null) {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where(donorType, isEqualTo: true)
+          .where("city", isEqualTo: city)
+          .snapshots();
+    }
+    if (city == null && pinCode != null) {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where(donorType, isEqualTo: true)
+          .where("pin_code", isEqualTo: pinCode)
+          .snapshots();
+    }
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where(donorType, isEqualTo: true)
+        .snapshots();
   }
 }
