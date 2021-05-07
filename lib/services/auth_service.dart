@@ -32,7 +32,7 @@ class AuthService {
   }
 
   /// Verify after fetching the OTP
-  static Future<bool> verifyOTP(String verificationId, String otp) async {
+  static Future<String> verifyOTP(String verificationId, String otp) async {
     AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: otp,
@@ -40,9 +40,13 @@ class AuthService {
     UserCredential result;
     try {
       result = await _firebaseAuth.signInWithCredential(credential);
-    } catch (e) {
+    }
+    on FirebaseAuthException catch (e) {
+      return getMessageFromErrorCode(e.code);
+    }
+    catch (e) {
       // throw e;
-      return false;
+      return "Something went wrong. Please try again later.";
     }
 
     if (result.user.uid != null) {
@@ -52,13 +56,13 @@ class AuthService {
             UserModel.fromFirebase(firebaseData: result.user);
         FirestoreDatabaseService.createNewUser(newUser);
       }
-      return true;
+      return null;
     }
-    return false;
+    return "Something went wrong. Please try again later.";
   }
 
   /// Verify after fetching the OTP ( for donors pages )
-  static Future<bool> verifyOtpForDonors(String verificationId, String otp , UserProfile userProfile) async {
+  static Future<String> verifyOtpForDonors(String verificationId, String otp , UserProfile userProfile) async {
     AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: otp,
@@ -66,10 +70,15 @@ class AuthService {
     UserCredential result;
     try {
       result = await _firebaseAuth.signInWithCredential(credential);
-    } catch (e) {
-      // throw e;
-      return false;
     }
+    on FirebaseAuthException catch (e) {
+      return getMessageFromErrorCode(e.code);
+    }
+    catch (e) {
+      // throw e;
+      return "Something went wrong. Please try again later.";
+    }
+
 
     if (result.user.uid != null) {
       userProfile.uid = result.user.uid;
@@ -80,9 +89,9 @@ class AuthService {
       else{
         FirestoreDatabaseService.updateUser(userProfile, userProfile.uid);
       }
-      return true;
+      return null;
     }
-    return false;
+    return "Something went wrong. Please try again later.";
   }
 
   static Future<void> logOut() async {

@@ -69,15 +69,13 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.city == null ||
         userProfile.pinCode == null ||
         userProfile.phoneNumber == null ||
-        userProfile.phoneNumber.length < 10 ||
+        userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
         userProfile.collegeName == null ||
         userProfile.lastCovidPositiveTimestamp == null) {
-      logger.i(userProfile.toJson());
       return false;
     }
     if (userProfile.pinCode.length < 6) {
-      logger.i(userProfile.toJson());
       return false;
     }
     this.userProfile.isVerifiedPlasmaDonor = true;
@@ -90,13 +88,14 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.city == null ||
         userProfile.pinCode == null ||
         userProfile.phoneNumber == null ||
-        userProfile.phoneNumber.length < 10 ||
+        userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
         userProfile.collegeName == null ||
-        userProfile.lastCovidPositiveTimestamp == null) {
+        userProfile.lastBloodDonationTimestamp == null) {
       return false;
     }
     if (userProfile.pinCode.length < 6) {
+      logger.w("failed pin code");
       return false;
     }
     this.userProfile.isVerifiedBloodDonor = true;

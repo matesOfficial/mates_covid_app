@@ -50,137 +50,143 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
     _dateController.text = DateFormatter.formatDate(
             userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
         "";
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 48),
-                  child: BloodDropLogo(
-                    dropType: "PLASMA",
+    return WillPopScope(
+      onWillPop: (){
+        userProfileProvider.resetProvider();
+        Navigator.pop(context);
+        return null;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 48),
+                    child: BloodDropLogo(
+                      dropType: "PLASMA",
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(
-                    "Plasma Donor",
-                    style: textTheme.headline6,
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      "Plasma Donor",
+                      style: textTheme.headline6,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 32, 32, 16),
-                child: TextBox(
-                  hintText: "Name",
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.name,
-                  onChanged: (value) => userProfileProvider.updateName(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: TextBox(
-                  hintText: "Pin Code",
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(6),
-                  ],
-                  onChanged: (value) =>
-                      userProfileProvider.updatePinCode(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 32,
-                ),
-                child: TextBox(
-                  hintText: "City",
-                  readOnly: true,
-                  controller: _cityController,
-                  onTap: () => _showSelectCityDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(32.0, 32, 32, 16),
+                  child: TextBox(
+                    hintText: "Name",
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.name,
+                    onChanged: (value) => userProfileProvider.updateName(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextBox(
-                  hintText: "Phone Number",
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
-                  ],
-                  onChanged: (value) =>
-                      userProfileProvider.updatePhoneNumber(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 32,
-                ),
-                child: TextBox(
-                  hintText: "Blood Group",
-                  keyboardType: TextInputType.name,
-                  controller: _bloodGroupController,
-                  readOnly: true,
-                  onTap: () => _showBloodGroupDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: TextBox(
+                    hintText: "Pin Code",
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    onChanged: (value) =>
+                        userProfileProvider.updatePinCode(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextBox(
-                  hintText: "MATES Affiliation",
-                  readOnly: true,
-                  controller: _collegeController,
-                  onTap: () => _showSelectCollegeDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "City",
+                    readOnly: true,
+                    controller: _cityController,
+                    onTap: () => _showSelectCityDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 32,
-                  right: 32,
-                  bottom: 32,
-                ),
-                child: TextBox(
-                  hintText: "Date of COVID positive report",
-                  keyboardType: TextInputType.name,
-                  readOnly: true,
-                  controller: _dateController,
-                  onTap: () => _selectDate(context),
-                  suffixIcon: Icon(
-                    Icons.date_range,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: TextBox(
+                    hintText: "Phone Number",
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onChanged: (value) =>
+                        userProfileProvider.updatePhoneNumber(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: BottomButton(
-                  loadingState: _isLoading,
-                  disabledState: false,
-                  child: Text("Continue"),
-                  onPressed: () =>
-                      _onSubmitDetails(userProfileProvider, context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "Blood Group",
+                    keyboardType: TextInputType.name,
+                    controller: _bloodGroupController,
+                    readOnly: true,
+                    onTap: () => _showBloodGroupDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 32)
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: TextBox(
+                    hintText: "MAIT",
+                    readOnly: true,
+                    controller: _collegeController,
+                    onTap: () => _showSelectCollegeDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    left: 32,
+                    right: 32,
+                    bottom: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "Date of COVID positive report",
+                    keyboardType: TextInputType.name,
+                    readOnly: true,
+                    controller: _dateController,
+                    onTap: () => _selectDate(context),
+                    suffixIcon: Icon(
+                      Icons.date_range,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: BottomButton(
+                    loadingState: _isLoading,
+                    disabledState: false,
+                    child: Text("Continue"),
+                    onPressed: () =>
+                        _onSubmitDetails(userProfileProvider, context),
+                  ),
+                ),
+                SizedBox(height: 32)
+              ],
+            ),
           ),
         ),
       ),
@@ -291,6 +297,9 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
       /// Fired when auto phone verification gets failed
       onPhoneVerificationFailed: (FirebaseAuthException e) {
         logger.w(e.message);
+        setState(() {
+          _isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AuthService.getMessageFromErrorCode(e.code)),
@@ -306,7 +315,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
           _isLoading = false;
         });
         // Go to OTP screen to input the OTP and verify if entered OTP was correct
-        bool _isOtpValid = await Navigator.push<bool>(
+        String _errorMessage = await Navigator.push<String>(
           context,
           MaterialPageRoute(
             builder: (context) => OtpScreen(
@@ -315,16 +324,21 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
             ),
           ),
         );
-        logger..d(_isOtpValid);
+        logger..d("error message: $_errorMessage");
         //  If entered OTP is valid
-        if (_isOtpValid == true) {
+        if (_errorMessage == null) {
+          userProfileProvider.resetProvider();
           Navigator.pushNamedAndRemoveUntil(context, '/confirmation_screen' , (route) => false);
+        }
+        // in case user has not entered OTP.
+        else if(_errorMessage == "NOT_ENTERED"){
+          return ;
         }
         // Display error message in case of invalid OTP.
         else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("The entered OTP is invalid."),
+              content: Text(_errorMessage),
               backgroundColor: Theme.of(context).errorColor,
             ),
           );

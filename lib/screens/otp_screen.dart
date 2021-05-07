@@ -1,4 +1,5 @@
 import 'package:covid_app/constants/image_constants.dart';
+import 'package:covid_app/global.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
@@ -28,36 +29,42 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     // Text Theme
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Column(
-          children: [
-            // Header
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 32),
-                child: SvgPicture.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, "NOT_ENTERED");
+        return null;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            children: [
+              // Header
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: SvgPicture.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
+                ),
               ),
-            ),
-            MyPinInputTextField(onChanged: (pin) {
-              onEditingComplete(context, pin);
-              _pin = pin;
-            }),
-            Spacer(),
-            BottomButton(
-              child: Text("Verify and proceed"),
-              onPressed: () => onEditingComplete(context, _pin),
-              loadingState: _loadingState,
-              disabledState: false,
-            ),
-            SizedBox(height: 32),
-            // TODO: Add MATES logo footer
-          ],
+              MyPinInputTextField(onChanged: (pin) {
+                onEditingComplete(context, pin);
+                _pin = pin;
+              }),
+              Spacer(),
+              BottomButton(
+                child: Text("Verify and proceed"),
+                onPressed: () => onEditingComplete(context, _pin),
+                loadingState: _loadingState,
+                disabledState: false,
+              ),
+              SizedBox(height: 32),
+              // TODO: Add MATES logo footer
+            ],
+          ),
         ),
       ),
     );
@@ -72,12 +79,13 @@ class _OtpScreenState extends State<OtpScreen> {
         });
         final UserProfileProvider userProfileProvider =
             Provider.of<UserProfileProvider>(context, listen: false);
-        bool _isValidOtp = await AuthService.verifyOtpForDonors(
+        String errorMessage = await AuthService.verifyOtpForDonors(
             widget.verificationId, pin, userProfileProvider.userProfile);
+        logger.d("donor otp verification: $errorMessage");
         setState(() {
           _loadingState = false;
         });
-        return Navigator.pop(context, _isValidOtp);
+        return Navigator.pop(context, errorMessage);
       }
     }
     // Normal OTP verification
@@ -86,12 +94,12 @@ class _OtpScreenState extends State<OtpScreen> {
         setState(() {
           _loadingState = true;
         });
-        bool _isValidOtp =
+        String errorMessage =
             await AuthService.verifyOTP(widget.verificationId, pin);
         setState(() {
           _loadingState = false;
         });
-        return Navigator.pop(context, _isValidOtp);
+        return Navigator.pop(context, errorMessage);
       }
     }
   }

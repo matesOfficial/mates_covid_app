@@ -19,24 +19,27 @@ import 'package:provider/provider.dart';
 
 class BloodDonationFormScreen extends StatefulWidget {
   @override
-  _BloodDonationFormScreenState createState() => _BloodDonationFormScreenState();
+  _BloodDonationFormScreenState createState() =>
+      _BloodDonationFormScreenState();
 }
 
 class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
   // loading state variable
   bool _isLoading = false;
+
   // Text editing controllers
   TextEditingController _cityController = TextEditingController();
   TextEditingController _bloodGroupController = TextEditingController();
   TextEditingController _collegeController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // Text Theme
     TextTheme textTheme = Theme.of(context).textTheme;
     // user profile provider
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context);
+        Provider.of<UserProfileProvider>(context);
     // user model provider
     final UserModel user = Provider.of<UserModel>(context, listen: false);
     // Set text for controllers
@@ -45,140 +48,146 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
         userProfileProvider.userProfile.bloodGroup ?? "";
     _collegeController.text = userProfileProvider.userProfile.collegeName ?? "";
     _dateController.text = DateFormatter.formatDate(
-        userProfileProvider.userProfile.lastBloodDonationTimestamp) ??
+            userProfileProvider.userProfile.lastBloodDonationTimestamp) ??
         "";
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 48),
-                  child: BloodDropLogo(
-                    dropType: "BLOOD",
+    return WillPopScope(
+      onWillPop: () {
+        userProfileProvider.resetProvider();
+        Navigator.pop(context);
+        return null;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 48),
+                    child: BloodDropLogo(
+                      dropType: "BLOOD",
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(
-                    "Blood Donor",
-                    style: textTheme.headline6,
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      "Blood Donor",
+                      style: textTheme.headline6,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 32, 32, 16),
-                child: TextBox(
-                  hintText: "Name",
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.name,
-                  onChanged: (value) => userProfileProvider.updateName(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: TextBox(
-                  hintText: "Pin Code",
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(6),
-                  ],
-                  onChanged: (value) =>
-                      userProfileProvider.updatePinCode(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 32,
-                ),
-                child: TextBox(
-                  hintText: "City",
-                  readOnly: true,
-                  controller: _cityController,
-                  onTap: () => _showSelectCityDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(32.0, 32, 32, 16),
+                  child: TextBox(
+                    hintText: "Name",
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.name,
+                    onChanged: (value) => userProfileProvider.updateName(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextBox(
-                  hintText: "Phone Number",
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
-                  ],
-                  onChanged: (value) =>
-                      userProfileProvider.updatePhoneNumber(value),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 32,
-                ),
-                child: TextBox(
-                  hintText: "Blood Group",
-                  keyboardType: TextInputType.name,
-                  controller: _bloodGroupController,
-                  readOnly: true,
-                  onTap: () => _showBloodGroupDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: TextBox(
+                    hintText: "Pin Code",
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    onChanged: (value) =>
+                        userProfileProvider.updatePinCode(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextBox(
-                  hintText: "MATES Affiliation",
-                  readOnly: true,
-                  controller: _collegeController,
-                  onTap: () => _showSelectCollegeDialog(context),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "City",
+                    readOnly: true,
+                    controller: _cityController,
+                    onTap: () => _showSelectCityDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 32,
-                  right: 32,
-                  bottom: 32,
-                ),
-                child: TextBox(
-                  hintText: "Date of last blood donation",
-                  keyboardType: TextInputType.name,
-                  readOnly: true,
-                  controller: _dateController,
-                  onTap: () => _selectDate(context),
-                  suffixIcon: Icon(
-                    Icons.date_range,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: TextBox(
+                    hintText: "Phone Number",
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onChanged: (value) =>
+                        userProfileProvider.updatePhoneNumber(value),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: BottomButton(
-                  loadingState: userProfileProvider.isUpdatingUserProfile,
-                  disabledState: false,
-                  child: Text("Continue"),
-                  onPressed: () =>
-                      _onSubmitDetails(userProfileProvider, context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "Blood Group",
+                    keyboardType: TextInputType.name,
+                    controller: _bloodGroupController,
+                    readOnly: true,
+                    onTap: () => _showBloodGroupDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 32)
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: TextBox(
+                    hintText: "MAIT",
+                    readOnly: true,
+                    controller: _collegeController,
+                    onTap: () => _showSelectCollegeDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    left: 32,
+                    right: 32,
+                    bottom: 32,
+                  ),
+                  child: TextBox(
+                    hintText: "Date of last blood donation",
+                    keyboardType: TextInputType.name,
+                    readOnly: true,
+                    controller: _dateController,
+                    onTap: () => _selectDate(context),
+                    suffixIcon: Icon(
+                      Icons.date_range,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: BottomButton(
+                    loadingState: _isLoading,
+                    disabledState: false,
+                    child: Text("Continue"),
+                    onPressed: () =>
+                        _onSubmitDetails(userProfileProvider, context),
+                  ),
+                ),
+                SizedBox(height: 32)
+              ],
+            ),
           ),
         ),
       ),
@@ -187,7 +196,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
 
   Future<void> _showBloodGroupDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -195,20 +204,21 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
         children: AppConstants.BLOOD_GROUP_LIST
             .map(
               (e) => MultiSelectDialogItem(
-            text: e,
-            onPressed: () {
-              userProfileProvider.updateBloodGroup(e);
-              Navigator.pop(context);
-            },
-          ),
-        ).toList(),
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateBloodGroup(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
   Future<void> _showSelectCollegeDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -216,20 +226,21 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
         children: AppConstants.COLLEGES_LIST
             .map(
               (e) => MultiSelectDialogItem(
-            text: e,
-            onPressed: () {
-              userProfileProvider.updateCollegeName(e);
-              Navigator.pop(context);
-            },
-          ),
-        ).toList(),
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateCollegeName(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
   Future<void> _showSelectCityDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -237,20 +248,21 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
         children: AppConstants.CITIES_LIST
             .map(
               (e) => MultiSelectDialogItem(
-            text: e,
-            onPressed: () {
-              userProfileProvider.updateCityName(e);
-              Navigator.pop(context);
-            },
-          ),
-        ).toList(),
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateCityName(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -262,8 +274,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
     }
   }
 
-  Future<void> _onSubmitDetails(
-      UserProfileProvider userProfileProvider, BuildContext context) async {
+  Future<void> _onSubmitDetails(UserProfileProvider userProfileProvider, BuildContext context) async {
     if (!userProfileProvider.validateBloodDonationForm()) {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -278,8 +289,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
 
     /// OTP verification method
     return AuthService.signInWithPhone(
-      "${userProfileProvider.userProfile.phoneNumber
-      }",
+      "${userProfileProvider.userProfile.phoneNumber}",
 
       /// Callbacks
       onAutoPhoneVerificationCompleted: (AuthCredential credential) {},
@@ -302,7 +312,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
           _isLoading = false;
         });
         // Go to OTP screen to input the OTP and verify if entered OTP was correct
-        bool _isOtpValid = await Navigator.push<bool>(
+        String _errorMessage = await Navigator.push<String>(
           context,
           MaterialPageRoute(
             builder: (context) => OtpScreen(
@@ -311,16 +321,22 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
             ),
           ),
         );
-        logger..d(_isOtpValid);
+        logger..d(_errorMessage);
         //  If entered OTP is valid
-        if (_isOtpValid == true) {
-          Navigator.pushNamedAndRemoveUntil(context, '/confirmation_screen' , (route) => false);
+        if (_errorMessage == null) {
+          userProfileProvider.resetProvider();
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/confirmation_screen', (route) => false);
+        }
+        // in case user has not entered OTP.
+        else if (_errorMessage == "NOT_ENTERED") {
+          return;
         }
         // Display error message in case of invalid OTP.
         else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("The entered OTP is invalid."),
+              content: Text(_errorMessage),
               backgroundColor: Theme.of(context).errorColor,
             ),
           );
@@ -328,4 +344,4 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
       },
     );
   }
-  }
+}

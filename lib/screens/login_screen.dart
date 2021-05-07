@@ -46,7 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(10),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -80,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     // Check if the entered phone number is correct
-    if (phoneNumber == null || phoneNumber.length < 10) {
+    if (phoneNumber == null || phoneNumber.length != 10) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter a valid phone number.'),
@@ -122,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
         // Go to OTP screen to input the OTP and verify if entered OTP was correct
-        bool _isOtpValid = await Navigator.push<bool>(
+        String _errorMessage = await Navigator.push<String>(
           context,
           MaterialPageRoute(
             builder: (context) => OtpScreen(
@@ -131,14 +130,18 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
         //  If entered OTP is valid
-        if (_isOtpValid == true) {
+        if (_errorMessage == null) {
           GetIt.instance<NavigationService>().pushWrapperAndRemoveAllRoutes();
+        }
+        // in case user has not entered OTP.
+        else if(_errorMessage == "NOT_ENTERED"){
+          return ;
         }
         // Display error message in case of invalid OTP.
         else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("The entered OTP is invalid."),
+              content: Text(_errorMessage),
               backgroundColor: Theme.of(context).errorColor,
             ),
           );

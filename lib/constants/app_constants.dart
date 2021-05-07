@@ -12,8 +12,10 @@ class AppConstants{
   ];
 
  static const List<String> COLLEGES_LIST = [
-   "MATES Affiliation",
-   "MAINS Affiliation"
+   "MAIT",
+   "MAIMS",
+   "MAU",
+   "Others"
    // TODO: Add more items to this list
  ];
 
