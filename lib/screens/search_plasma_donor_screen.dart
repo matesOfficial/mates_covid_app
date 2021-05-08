@@ -12,7 +12,6 @@ class SearchPlasmaDonorScreen extends StatefulWidget {
       _SearchPlasmaDonorScreenState();
 }
 
-
 class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
   TextEditingController _cityController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
@@ -70,74 +69,59 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Plasma Donors"),
-      ),
-      // TODO: Re-factor this code, shift firebase query to database services
-      body: StreamBuilder(
-        stream: FirestoreDatabaseService.streamDonors(
-          donorType: "is_plasma_donor",
-          city: _selectedCity,
-          state: _selectedState,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Plasma Donors"),
         ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
+        // TODO: Re-factor this code, shift firebase query to database services
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 32,
+                ),
+                child: TextBox(
+                  hintText: "State",
+                  readOnly: true,
+                  controller: _stateController,
+                  onTap: () => _showSelectStateDialog(context),
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                  ),
+                ),
               ),
-            );
-          }
-          var snapshotData = snapshot.data.docs;
-          print(snapshotData);
-          List<UserProfile> userProfiles = List.from(snapshotData.map((doc) {
-            return UserProfile.fromJson(doc.data());
-          }));
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData) {
-            return Center(child: Text("No donor found"));
-          }
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 32,
+                ),
+                child: TextBox(
+                  hintText: "City",
+                  readOnly: true,
+                  controller: _cityController,
+                  onTap: () => _showSelectCityDialog(context),
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                  ),
+                ),
+              ),
+              StreamBuilder(
+                  stream: FirestoreDatabaseService.streamDonors(
+                    donorType: "is_plasma_donor",
+                    timestampType: "last_covid_positive_date",
+                    city: _selectedCity,
+                    state: _selectedState,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 32,
-                  ),
-                  child: TextBox(
-                    hintText: "State",
-                    readOnly: true,
-                    controller: _stateController,
-                    onTap: () => _showSelectStateDialog(context),
-                    suffixIcon: Icon(
-                      Icons.arrow_drop_down,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 32,
-                  ),
-                  child: TextBox(
-                    hintText: "City",
-                    readOnly: true,
-                    controller: _cityController,
-                    onTap: () => _showSelectCityDialog(context),
-                    suffixIcon: Icon(
-                      Icons.arrow_drop_down,
-                    ),
-                  ),
-                ),
-                (snapshot.data == null || snapshot.data.docs.length == 0)
-                    ? Column(
+                    if (snapshot.data == null) {
+                      return Column(
                         children: [
                           Container(
                             height: MediaQuery.of(context).size.height * 0.3,
@@ -154,24 +138,47 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                             ),
                           ),
                         ],
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: userProfiles.length,
-                        itemBuilder: (context, index) {
-                          UserProfile user = userProfiles[index];
-                          return CustomListCard(
-                            user: user,
-                            isPlasma: true,
-                          );
-                        },
-                      ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
+                      );
+                    }
+                    if (snapshot.data.docs.length == 0)
+                      return Column(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                          ),
+                          Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                "We are currently unable to find donors in your area. Hold on till something nice pops up!",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    var snapshotData = snapshot.data.docs;
+                    List<UserProfile> userProfiles =
+                        List.from(snapshotData.map((doc) {
+                      return UserProfile.fromJson(doc.data());
+                    }));
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: userProfiles.length,
+                      itemBuilder: (context, index) {
+                        UserProfile user = userProfiles[index];
+                        return CustomListCard(
+                          user: user,
+                          isPlasma: true,
+                        );
+                      },
+                    );
+                  })
+            ],
+          ),
+        ));
   }
 }

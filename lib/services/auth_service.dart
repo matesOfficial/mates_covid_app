@@ -86,9 +86,9 @@ class AuthService {
       userProfile.uid = result.user.uid;
       if (result.additionalUserInfo.isNewUser) {
         // Add the information of newly created user to database.
-        FirestoreDatabaseService.createNewUserProfile(userProfile);
+        FirestoreDatabaseService.createNewUserProfile(result.user.uid , userProfile);
       } else {
-        FirestoreDatabaseService.updateUser(userProfile, userProfile.uid);
+        FirestoreDatabaseService.updateUser(userProfile, result.user.uid);
       }
       return null;
     }

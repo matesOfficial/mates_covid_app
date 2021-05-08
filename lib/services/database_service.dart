@@ -39,15 +39,15 @@ class FirestoreDatabaseService {
   }
 
   /// Create a new user profile in db
-  static Future<void> createNewUserProfile(UserProfile newUser) {
+  static Future<void> createNewUserProfile( String uid , UserProfile newUser) {
     return FirebaseFirestore.instance
         .collection('users')
-        .doc(newUser.uid)
+        .doc(uid)
         .set(newUser.toJson());
   }
 
   static Stream<QuerySnapshot> streamDonors(
-      {String city, String state, @required String donorType}) {
+      {String city, String state, @required String donorType , @required String timestampType}) {
     if (city != null && state == null) {
       return FirebaseFirestore.instance
           .collection('users')

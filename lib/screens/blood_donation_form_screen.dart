@@ -160,7 +160,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: TextBox(
-                    hintText: "MAIT",
+                    hintText: "Mates Affiliation",
                     readOnly: true,
                     controller: _collegeController,
                     onTap: () => _showSelectCollegeDialog(context),

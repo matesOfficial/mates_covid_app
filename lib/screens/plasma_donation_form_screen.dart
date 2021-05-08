@@ -162,7 +162,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: TextBox(
-                    hintText: "MAIT",
+                    hintText: "Mates Affiliation",
                     readOnly: true,
                     controller: _collegeController,
                     onTap: () => _showSelectCollegeDialog(context),
@@ -265,7 +265,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
               (e) => MultiSelectDialogItem(
                 text: e,
                 onPressed: () {
-                  userProfileProvider.updateStateName(e);
+                  userProfileProvider.updateCityName(e);
                   Navigator.pop(context);
                 },
               ),

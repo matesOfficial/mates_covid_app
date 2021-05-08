@@ -101,26 +101,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
       /// Fired upon completion of phone code auto-retrieval
       onAutoPhoneVerificationCompleted: (PhoneAuthCredential credential) async {
-        try {
-          await FirebaseAuth.instance.signInWithCredential(credential);
-        } on FirebaseAuthException catch (e) {
-          return ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AuthService.getMessageFromErrorCode(e.code)),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        } catch (e) {
-          // throw e;
-          return ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Something went wrong.Please try again later."),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/wrapper", (route) => false);
+        // TODO: Fix auto verification issue
+        // try {
+        //   await FirebaseAuth.instance.signInWithCredential(credential);
+        // } on FirebaseAuthException catch (e) {
+        //   return ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       content: Text(AuthService.getMessageFromErrorCode(e.code)),
+        //       backgroundColor: Theme.of(context).errorColor,
+        //     ),
+        //   );
+        // } catch (e) {
+        //   // throw e;
+        //   return ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       content: Text("Something went wrong.Please try again later."),
+        //       backgroundColor: Theme.of(context).errorColor,
+        //     ),
+        //   );
+        // }
+        // GetIt.instance<NavigationService>().pop();
       },
 
       /// Fired when auto phone verification gets failed
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         //  If entered OTP is valid
         if (_errorMessage == null) {
-          GetIt.instance<NavigationService>().pushWrapperAndRemoveAllRoutes();
+          Navigator.pushNamedAndRemoveUntil(context, "/wrapper", (route) => false);
         }
         // in case user has not entered OTP.
         else if (_errorMessage == "NOT_ENTERED") {

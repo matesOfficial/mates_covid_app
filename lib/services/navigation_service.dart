@@ -11,12 +11,12 @@ class NavigationService {
     navigatorKey.currentState.popUntil(routePredicate);
   }
 
-  void pushWrapperAndRemoveAllRoutes(){
-    navigatorKey.currentState.pushNamedAndRemoveUntil( '/wrapper',(route) => false);
+   pushWrapperAndRemoveAllRoutes(){
+  return navigatorKey.currentState.pushNamedAndRemoveUntil( '/wrapper',(route) => false);
   }
 
-  void pushConfirmationAndRemoveAllRoutes(){
-    navigatorKey.currentState.pushNamedAndRemoveUntil( '/confirmation_screen',(route) => false);
+   pushConfirmationAndRemoveAllRoutes(){
+  return  navigatorKey.currentState.pushNamedAndRemoveUntil( '/confirmation_screen',(route) => false);
   }
 
 }
