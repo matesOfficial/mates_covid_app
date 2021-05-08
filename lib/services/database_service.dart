@@ -47,25 +47,33 @@ class FirestoreDatabaseService {
   }
 
   static Stream<QuerySnapshot> streamDonors(
-      {String city, String pinCode, @required String donorType}) {
-    if (city != null && pinCode == null) {
+      {String city, String state, @required String donorType}) {
+    if (city != null && state == null) {
       return FirebaseFirestore.instance
           .collection('users')
           .where(donorType, isEqualTo: true)
           .where("city", isEqualTo: city)
           .snapshots();
     }
-    if (city == null && pinCode != null) {
+    if (city == null && state != null) {
       return FirebaseFirestore.instance
           .collection('users')
           .where(donorType, isEqualTo: true)
-          .where("pin_code", isEqualTo: pinCode)
+          .where("state", isEqualTo: state)
+          .snapshots();
+    } 
+    else if (city == null && state == null) {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where(donorType, isEqualTo: true)
           .snapshots();
     }
-
     return FirebaseFirestore.instance
         .collection('users')
         .where(donorType, isEqualTo: true)
+        .where("city", isEqualTo: city)
+        .where("state", isEqualTo: state)
         .snapshots();
+    
   }
 }

@@ -1,6 +1,5 @@
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/screens/blood_donation_form_screen.dart';
-import 'package:covid_app/screens/oxygen_donation_form_screen.dart';
 import 'package:covid_app/screens/plasma_donation_form_screen.dart';
 import 'package:covid_app/screens/search_blood_donor_screen.dart';
 import 'package:covid_app/screens/search_plasma_donor_screen.dart';
@@ -46,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
                     Text(
-                      "We got your back,\n with all the covid \nresources. Find all \nthe help you need \nhere.",
+                      "We got your back,\nwith all the covid \nresources. Find all \nthe help you need \nhere.",
                       style: TextStyle(fontSize: 12, color: Colors.white),
                     ),
                   ],

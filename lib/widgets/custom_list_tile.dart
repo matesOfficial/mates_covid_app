@@ -33,7 +33,7 @@ class CustomListCard extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  if (user.lastBloodDonationTimestamp != null &&
+                  if (user.lastBloodDonationDate != null &&
                       isPlasma == false)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -42,7 +42,7 @@ class CustomListCard extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                  if (user.lastCovidPositiveTimestamp != null &&
+                  if (user.lastCovidPositiveDate != null &&
                       isPlasma == true)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -82,12 +82,12 @@ class CustomListCard extends StatelessWidget {
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Color(0xffFAB550))),
                   ),
-                  if (user.lastBloodDonationTimestamp != null &&
+                  if (user.lastBloodDonationDate != null &&
                       isPlasma == false)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                          user.lastBloodDonationTimestamp
+                          user.lastBloodDonationDate
                               .toDate()
                               .toLocal()
                               .toString()
@@ -95,12 +95,12 @@ class CustomListCard extends StatelessWidget {
                           style: TextStyle(color: Color(0xffFAB550)),
                           textAlign: TextAlign.right),
                     ),
-                  if (user.lastCovidPositiveTimestamp != null &&
+                  if (user.lastCovidPositiveDate != null &&
                       isPlasma == true)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        user.lastCovidPositiveTimestamp
+                        user.lastCovidPositiveDate
                             .toDate()
                             .toLocal()
                             .toString()

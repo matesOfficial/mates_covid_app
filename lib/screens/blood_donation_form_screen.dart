@@ -1,7 +1,6 @@
 import 'package:covid_app/constants/app_constants.dart';
 import 'package:covid_app/global.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
-import 'package:covid_app/screens/confirmation_screen.dart';
 import 'package:covid_app/screens/otp_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/utils/date_formatter.dart';
@@ -9,7 +8,6 @@ import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:covid_app/widgets/text_box.dart';
-import 'package:covid_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +28,7 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
   // Text editing controllers
   TextEditingController _cityController = TextEditingController();
   TextEditingController _bloodGroupController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
   TextEditingController _collegeController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
 
@@ -40,16 +39,16 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
     // user profile provider
     final UserProfileProvider userProfileProvider =
         Provider.of<UserProfileProvider>(context);
-    // user model provider
-    final UserModel user = Provider.of<UserModel>(context, listen: false);
     // Set text for controllers
     _cityController.text = userProfileProvider.userProfile.city ?? "";
     _bloodGroupController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
-    _collegeController.text = userProfileProvider.userProfile.matesAffiliation ?? "";
+    _collegeController.text =
+        userProfileProvider.userProfile.matesAffiliation ?? "";
     _dateController.text = DateFormatter.formatDate(
-            userProfileProvider.userProfile.lastBloodDonationTimestamp) ??
+            userProfileProvider.userProfile.lastBloodDonationDate) ??
         "";
+    _stateController.text = userProfileProvider.userProfile.state ?? "";
 
     return WillPopScope(
       onWillPop: () {
@@ -100,6 +99,19 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
                     ],
                     onChanged: (value) =>
                         userProfileProvider.updatePinCode(value),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16, left: 32, right: 32, bottom: 0),
+                  child: TextBox(
+                    hintText: "State",
+                    readOnly: true,
+                    controller: _stateController,
+                    onTap: () => _showSelectStateDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
                   ),
                 ),
                 Padding(
@@ -215,6 +227,28 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
       ),
     );
   }
+  Future<void> _showSelectStateDialog(BuildContext context) {
+    final UserProfileProvider userProfileProvider =
+    Provider.of<UserProfileProvider>(context, listen: false);
+    return showDialog(
+      context: context,
+      builder: (context) => MultiSelectDialog(
+        title: "Select your state name",
+        children: AppConstants.STATES_CITIES_MAP.keys
+            .toList()
+            .map(
+              (e) => MultiSelectDialogItem(
+            text: e,
+            onPressed: () {
+              userProfileProvider.updateStateName(e);
+              Navigator.pop(context);
+            },
+          ),
+        )
+            .toList(),
+      ),
+    );
+  }
 
   Future<void> _showSelectCollegeDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
@@ -274,7 +308,8 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
     }
   }
 
-  Future<void> _onSubmitDetails(UserProfileProvider userProfileProvider, BuildContext context) async {
+  Future<void> _onSubmitDetails(
+      UserProfileProvider userProfileProvider, BuildContext context) async {
     if (!userProfileProvider.validateBloodDonationForm()) {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -292,7 +327,25 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
       "${userProfileProvider.userProfile.phoneNumber}",
 
       /// Callbacks
-      onAutoPhoneVerificationCompleted: (AuthCredential credential) {},
+      onAutoPhoneVerificationCompleted: (AuthCredential credential) async {
+        String _errorMessage = await AuthService.loginForDonors(
+            credential, userProfileProvider.userProfile);
+        // Conditions to validate error message
+        if (_errorMessage == null) {
+          userProfileProvider.resetProvider();
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/confirmation_screen', (route) => false);
+        }
+        // Display error message in case of invalid OTP.
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(_errorMessage),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        }
+      },
 
       /// Fired when auto phone verification gets failed
       onPhoneVerificationFailed: (FirebaseAuthException e) {

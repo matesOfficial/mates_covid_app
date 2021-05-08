@@ -8,12 +8,9 @@ import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/multi_select_dialog.dart';
 import 'package:covid_app/widgets/text_box.dart';
-import 'package:covid_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:covid_app/services/navigation_service.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Make the code for this page a bit cleaner
@@ -32,6 +29,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
   TextEditingController _cityController = TextEditingController();
   TextEditingController _bloodGroupController = TextEditingController();
   TextEditingController _collegeController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
 
   @override
@@ -46,12 +44,14 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
     _cityController.text = userProfileProvider.userProfile.city ?? "";
     _bloodGroupController.text =
         userProfileProvider.userProfile.bloodGroup ?? "";
-    _collegeController.text = userProfileProvider.userProfile.matesAffiliation ?? "";
+    _collegeController.text =
+        userProfileProvider.userProfile.matesAffiliation ?? "";
+    _stateController.text = userProfileProvider.userProfile.state ?? "";
     _dateController.text = DateFormatter.formatDate(
-            userProfileProvider.userProfile.lastCovidPositiveTimestamp) ??
+            userProfileProvider.userProfile.lastCovidPositiveDate) ??
         "";
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         userProfileProvider.resetProvider();
         Navigator.pop(context);
         return null;
@@ -102,6 +102,19 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16, left: 32, right: 32, bottom: 0),
+                  child: TextBox(
+                    hintText: "State",
+                    readOnly: true,
+                    controller: _stateController,
+                    onTap: () => _showSelectStateDialog(context),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down,
+                    ),
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
                     horizontal: 32,
@@ -110,7 +123,9 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                     hintText: "City",
                     readOnly: true,
                     controller: _cityController,
-                    onTap: () => _showSelectCityDialog(context),
+                    onTap: userProfileProvider.userProfile.state == null
+                        ? null
+                        : () => _showSelectCityDialog(context),
                     suffixIcon: Icon(
                       Icons.arrow_drop_down,
                     ),
@@ -244,12 +259,36 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
       context: context,
       builder: (context) => MultiSelectDialog(
         title: "Select your city name",
-        children: AppConstants.CITIES_LIST
+        children: AppConstants
+            .STATES_CITIES_MAP[userProfileProvider.userProfile.state]
             .map(
               (e) => MultiSelectDialogItem(
                 text: e,
                 onPressed: () {
-                  userProfileProvider.updateCityName(e);
+                  userProfileProvider.updateStateName(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Future<void> _showSelectStateDialog(BuildContext context) {
+    final UserProfileProvider userProfileProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
+    return showDialog(
+      context: context,
+      builder: (context) => MultiSelectDialog(
+        title: "Select your state name",
+        children: AppConstants.STATES_CITIES_MAP.keys
+            .toList()
+            .map(
+              (e) => MultiSelectDialogItem(
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateStateName(e);
                   Navigator.pop(context);
                 },
               ),
@@ -292,7 +331,25 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
       "${userProfileProvider.userProfile.phoneNumber}",
 
       /// Callbacks
-      onAutoPhoneVerificationCompleted: (AuthCredential credential) {},
+      onAutoPhoneVerificationCompleted: (AuthCredential credential) async {
+        String _errorMessage = await AuthService.loginForDonors(
+            credential, userProfileProvider.userProfile);
+        // Conditions to validate error message
+        if (_errorMessage == null) {
+          userProfileProvider.resetProvider();
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/confirmation_screen', (route) => false);
+        }
+        // Display error message in case of invalid OTP.
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(_errorMessage),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        }
+      },
 
       /// Fired when auto phone verification gets failed
       onPhoneVerificationFailed: (FirebaseAuthException e) {
@@ -328,11 +385,12 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
         //  If entered OTP is valid
         if (_errorMessage == null) {
           userProfileProvider.resetProvider();
-          Navigator.pushNamedAndRemoveUntil(context, '/confirmation_screen' , (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/confirmation_screen', (route) => false);
         }
         // in case user has not entered OTP.
-        else if(_errorMessage == "NOT_ENTERED"){
-          return ;
+        else if (_errorMessage == "NOT_ENTERED") {
+          return;
         }
         // Display error message in case of invalid OTP.
         else {

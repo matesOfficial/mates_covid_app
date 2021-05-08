@@ -52,14 +52,19 @@ class UserProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateStateName(String name) {
+    this.userProfile.state = name;
+    notifyListeners();
+  }
+
   void getLastCovidPositiveDate(DateTime date) {
-    this.userProfile.lastCovidPositiveTimestamp =
+    this.userProfile.lastCovidPositiveDate =
         DateFormatter.convertDateTimeToTimestamp(date);
     notifyListeners();
   }
 
   void getLastBloodDonationDate(DateTime date){
-    this.userProfile.lastBloodDonationTimestamp = DateFormatter.convertDateTimeToTimestamp(date);
+    this.userProfile.lastBloodDonationDate = DateFormatter.convertDateTimeToTimestamp(date);
     notifyListeners();
   }
 
@@ -72,13 +77,13 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
         userProfile.matesAffiliation == null ||
-        userProfile.lastCovidPositiveTimestamp == null) {
+        userProfile.lastCovidPositiveDate == null) {
       return false;
     }
     if (userProfile.pinCode.length < 6) {
       return false;
     }
-    this.userProfile.isVerifiedPlasmaDonor = true;
+    this.userProfile.isPlasmaDonor = true;
     return true;
   }
 
@@ -91,14 +96,14 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
         userProfile.matesAffiliation == null ||
-        userProfile.lastBloodDonationTimestamp == null) {
+        userProfile.lastBloodDonationDate == null) {
       return false;
     }
     if (userProfile.pinCode.length < 6) {
       logger.w("failed pin code");
       return false;
     }
-    this.userProfile.isVerifiedBloodDonor = true;
+    this.userProfile.isBloodDonor = true;
     return true;
   }
 

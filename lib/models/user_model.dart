@@ -32,6 +32,7 @@ class UserModel {
 
 class UserProfile {
   String name;
+  String state;
   String photoUrl;
   String email;
   String uid;
@@ -41,60 +42,69 @@ class UserProfile {
   String city;
   String pinCode;
   String matesAffiliation;
-  Timestamp lastBloodDonationTimestamp;
-  bool isVerifiedPlasmaDonor;
-  bool isVerifiedBloodDonor;
-  Timestamp lastCovidPositiveTimestamp;
+  Timestamp lastBloodDonationDate;
+  bool isPlasmaDonor;
+  bool isBloodDonor;
+  Timestamp timestamp;
+  Timestamp lastCovidPositiveDate;
 
   UserProfile(
       {this.name,
-        this.photoUrl,
-        this.email,
-        this.uid,
-        this.gender,
-        this.phoneNumber,
-        this.bloodGroup,
-        this.city,
-        this.pinCode,
-        this.matesAffiliation,
-        this.lastBloodDonationTimestamp,
-        this.isVerifiedPlasmaDonor,
-        this.isVerifiedBloodDonor,
-        this.lastCovidPositiveTimestamp});
+      this.photoUrl,
+      this.email,
+      this.uid,
+      this.gender,
+      this.phoneNumber,
+      this.bloodGroup,
+      this.state,
+      this.city,
+      this.pinCode,
+      this.matesAffiliation,
+      this.lastBloodDonationDate,
+      this.isPlasmaDonor,
+      this.isBloodDonor,
+      this.lastCovidPositiveDate});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     photoUrl = json['photo_url'];
     email = json['email'];
     uid = json['uid'];
+    state = json['state'];
     gender = json['gender'];
     phoneNumber = json['phone_number'];
     bloodGroup = json['blood_group'];
     city = json['city'];
+    timestamp = json['timestamp'];
     pinCode = json['pin_code'];
     matesAffiliation = json['mates_affiliation'];
-    lastBloodDonationTimestamp = json['last_blood_donation_timestamp'];
-    isVerifiedPlasmaDonor = json['is_verified_plasma_donor'];
-    isVerifiedBloodDonor = json['is_verified_blood_donor'];
-    lastCovidPositiveTimestamp = json['last_covid_positive_timestamp'];
+    lastBloodDonationDate = json['last_blood_donation_date'];
+    isPlasmaDonor = json['is_plasma_donor'];
+    isBloodDonor = json['is_blood_donor'];
+    lastCovidPositiveDate = json['last_covid_positive_date'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['photo_url'] = this.photoUrl;
-    data['email'] = this.email;
-    data['uid'] = this.uid;
-    data['gender'] = this.gender;
-    data['phone_number'] = this.phoneNumber;
-    data['blood_group'] = this.bloodGroup;
-    data['city'] = this.city;
-    data['pin_code'] = this.pinCode;
-    data['mates_affiliation'] = this.matesAffiliation;
-    data['last_blood_donation_timestamp'] = this.lastBloodDonationTimestamp;
-    data['is_verified_plasma_donor'] = this.isVerifiedPlasmaDonor;
-    data['is_verified_blood_donor'] = this.isVerifiedBloodDonor;
-    data['last_covid_positive_timestamp'] = this.lastCovidPositiveTimestamp;
+    if (this.name != null) data['name'] = this.name;
+    if (this.photoUrl != null) data['photo_url'] = this.photoUrl;
+    if (this.state != null) data['state'] = this.state;
+    if (this.email != null) data['email'] = this.email;
+    if (this.uid != null) data['uid'] = this.uid;
+    if (this.timestamp != null) data['timestamp'] = Timestamp.now();
+    if (this.gender != null) data['gender'] = this.gender;
+    if (this.phoneNumber != null) data['phone_number'] = this.phoneNumber;
+    if (this.bloodGroup != null) data['blood_group'] = this.bloodGroup;
+    if (this.city != null) data['city'] = this.city;
+    if (this.pinCode != null) data['pin_code'] = this.pinCode;
+    if (this.matesAffiliation != null)
+      data['mates_affiliation'] = this.matesAffiliation;
+    if (this.lastBloodDonationDate != null)
+      data['last_blood_donation_date'] = this.lastBloodDonationDate;
+    if (this.isBloodDonor != null) data['is_plasma_donor'] = this.isPlasmaDonor;
+    if (this.isBloodDonor != null) data['is_blood_donor'] = this.isBloodDonor;
+    if (this.lastCovidPositiveDate != null)
+      data['last_covid_positive_date'] = this.lastCovidPositiveDate;
     return data;
   }
 }

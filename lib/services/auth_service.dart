@@ -32,19 +32,16 @@ class AuthService {
   }
 
   /// Verify after fetching the OTP
-  static Future<String> verifyOTP(String verificationId, String otp) async {
-    AuthCredential credential = PhoneAuthProvider.credential(
+  static Future<String> verifyOTP(String verificationId, String otp) async {AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: otp,
     );
     UserCredential result;
     try {
       result = await _firebaseAuth.signInWithCredential(credential);
-    }
-    on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       return getMessageFromErrorCode(e.code);
-    }
-    catch (e) {
+    } catch (e) {
       // throw e;
       return "Something went wrong. Please try again later.";
     }
@@ -62,42 +59,40 @@ class AuthService {
   }
 
   /// Verify after fetching the OTP ( for donors pages )
-  static Future<String> verifyOtpForDonors(String verificationId, String otp , UserProfile userProfile) async {
+  static Future<String> verifyOtpForDonors(
+      String verificationId, String otp, UserProfile userProfile) async {
     AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: otp,
     );
+   return loginForDonors(credential, userProfile);
+  }
+
+
+
+  /// Login for donors function
+  static Future<String> loginForDonors(
+      AuthCredential credential, UserProfile userProfile) async {
     UserCredential result;
     try {
       result = await _firebaseAuth.signInWithCredential(credential);
-    }
-    on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       return getMessageFromErrorCode(e.code);
-    }
-    catch (e) {
+    } catch (e) {
       // throw e;
       return "Something went wrong. Please try again later.";
     }
-
-
     if (result.user.uid != null) {
       userProfile.uid = result.user.uid;
       if (result.additionalUserInfo.isNewUser) {
         // Add the information of newly created user to database.
         FirestoreDatabaseService.createNewUserProfile(userProfile);
-      }
-      else{
+      } else {
         FirestoreDatabaseService.updateUser(userProfile, userProfile.uid);
       }
       return null;
     }
     return "Something went wrong. Please try again later.";
-  }
-
-  static Future<void> logOut() async {
-    if (_firebaseAuth.currentUser != null) {
-      await _firebaseAuth.signOut();
-    }
   }
 
   /// Handles error and returns error messages in all cases.
@@ -141,13 +136,17 @@ class AuthService {
     }
   }
 
-  static Future<void> updateUserAuthInfo(UserProfile user)async{
-    try {
-      await _firebaseAuth.currentUser.updateProfile(displayName: user.name);
-    }
-    catch (e) {
-      logger.w(e);
+  static Future<void> logOut() async {
+    if (_firebaseAuth.currentUser != null) {
+      await _firebaseAuth.signOut();
     }
   }
 
+  static Future<void> updateUserAuthInfo(UserProfile user) async {
+    try {
+      await _firebaseAuth.currentUser.updateProfile(displayName: user.name);
+    } catch (e) {
+      logger.w(e);
+    }
+  }
 }

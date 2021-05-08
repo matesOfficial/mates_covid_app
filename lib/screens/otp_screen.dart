@@ -2,6 +2,7 @@ import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/global.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/services/auth_service.dart';
+import 'package:covid_app/widgets/app_footer.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/my_pin_input_text_field.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Text Theme
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context, "NOT_ENTERED");
@@ -54,15 +53,18 @@ class _OtpScreenState extends State<OtpScreen> {
                 onEditingComplete(context, pin);
                 _pin = pin;
               }),
-              Spacer(),
-              BottomButton(
-                child: Text("Verify and proceed"),
-                onPressed: () => onEditingComplete(context, _pin),
-                loadingState: _loadingState,
-                disabledState: false,
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0),
+                child: BottomButton(
+                  child: Text("Verify and proceed"),
+                  onPressed: () => onEditingComplete(context, _pin),
+                  loadingState: _loadingState,
+                  disabledState: false,
+                ),
               ),
-              SizedBox(height: 32),
-              // TODO: Add MATES logo footer
+              Spacer(),
+              AppFooter(),
+              SizedBox(height: 16),
             ],
           ),
         ),

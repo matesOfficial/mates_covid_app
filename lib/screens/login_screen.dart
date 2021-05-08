@@ -3,6 +3,7 @@ import 'package:covid_app/global.dart';
 import 'package:covid_app/screens/otp_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/services/navigation_service.dart';
+import 'package:covid_app/widgets/app_footer.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/text_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,8 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Text theme
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -65,7 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 disabledState: false,
               ),
             ),
-            // TODO: Add MATES logo footer
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: AppFooter(),
+            ),
+            SizedBox(height: 16)
           ],
         ),
       ),
@@ -97,14 +101,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
       /// Fired upon completion of phone code auto-retrieval
       onAutoPhoneVerificationCompleted: (PhoneAuthCredential credential) async {
-        logger.d("callback fired");
-        Navigator.pop(context);
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        GetIt.instance<NavigationService>().pushWrapperAndRemoveAllRoutes();
+        try {
+          await FirebaseAuth.instance.signInWithCredential(credential);
+        } on FirebaseAuthException catch (e) {
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AuthService.getMessageFromErrorCode(e.code)),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        } catch (e) {
+          // throw e;
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Something went wrong.Please try again later."),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        }
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/wrapper", (route) => false);
       },
 
       /// Fired when auto phone verification gets failed
       onPhoneVerificationFailed: (FirebaseAuthException e) {
+        // turn off the loading state of button upon successful login
+        setState(() {
+          _isLoading = false;
+        });
         logger.w(e.message);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -134,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
           GetIt.instance<NavigationService>().pushWrapperAndRemoveAllRoutes();
         }
         // in case user has not entered OTP.
-        else if(_errorMessage == "NOT_ENTERED"){
-          return ;
+        else if (_errorMessage == "NOT_ENTERED") {
+          return;
         }
         // Display error message in case of invalid OTP.
         else {
