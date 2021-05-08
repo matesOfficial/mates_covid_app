@@ -227,9 +227,10 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
       ),
     );
   }
+
   Future<void> _showSelectStateDialog(BuildContext context) {
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -238,13 +239,13 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
             .toList()
             .map(
               (e) => MultiSelectDialogItem(
-            text: e,
-            onPressed: () {
-              userProfileProvider.updateStateName(e);
-              Navigator.pop(context);
-            },
-          ),
-        )
+                text: e,
+                onPressed: () {
+                  userProfileProvider.updateStateName(e);
+                  Navigator.pop(context);
+                },
+              ),
+            )
             .toList(),
       ),
     );
@@ -279,7 +280,8 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
       context: context,
       builder: (context) => MultiSelectDialog(
         title: "Select your city name",
-        children: AppConstants.CITIES_LIST
+        children: AppConstants
+            .STATES_CITIES_MAP[userProfileProvider.userProfile.state]
             .map(
               (e) => MultiSelectDialogItem(
                 text: e,

@@ -62,17 +62,17 @@ class FirestoreDatabaseService {
           .where("state", isEqualTo: state)
           .snapshots();
     } 
-    else if (city == null && state == null) {
+    else if (city != null && state != null) {
       return FirebaseFirestore.instance
           .collection('users')
           .where(donorType, isEqualTo: true)
+          .where("city", isEqualTo: city)
+          .where("state", isEqualTo: state)
           .snapshots();
     }
     return FirebaseFirestore.instance
         .collection('users')
         .where(donorType, isEqualTo: true)
-        .where("city", isEqualTo: city)
-        .where("state", isEqualTo: state)
         .snapshots();
     
   }

@@ -130,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
         logger.w(e.message);
+        print(e.message);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AuthService.getMessageFromErrorCode(e.code)),
