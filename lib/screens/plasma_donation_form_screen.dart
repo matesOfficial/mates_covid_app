@@ -315,6 +315,9 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
   Future<void> _onSubmitDetails(
       UserProfileProvider userProfileProvider, BuildContext context) async {
     if (!userProfileProvider.validatePlasmaForm()) {
+      setState(() {
+        _isLoading = false;
+      });
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter all the details.'),

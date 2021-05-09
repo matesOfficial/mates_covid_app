@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   UserProfile userProfile = UserProfile();
+
   // private variable to check if the process to update to db is complete.
   bool _isUpdatingUserProfile = false;
 
   // Getter for user profile loading variable
   bool get isUpdatingUserProfile => _isUpdatingUserProfile;
-
-
 
   /// Functions to get user details as input
 
@@ -63,8 +62,9 @@ class UserProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getLastBloodDonationDate(DateTime date){
-    this.userProfile.lastBloodDonationDate = DateFormatter.convertDateTimeToTimestamp(date);
+  void getLastBloodDonationDate(DateTime date) {
+    this.userProfile.lastBloodDonationDate =
+        DateFormatter.convertDateTimeToTimestamp(date);
     notifyListeners();
   }
 
@@ -95,8 +95,7 @@ class UserProfileProvider extends ChangeNotifier {
         userProfile.phoneNumber == null ||
         userProfile.phoneNumber.length != 13 ||
         userProfile.bloodGroup == null ||
-        userProfile.matesAffiliation == null ||
-        userProfile.lastBloodDonationDate == null) {
+        userProfile.matesAffiliation == null) {
       return false;
     }
     if (userProfile.pinCode.length < 6) {
@@ -116,9 +115,8 @@ class UserProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetProvider(){
+  void resetProvider() {
     this.userProfile = UserProfile();
     notifyListeners();
   }
-
 }

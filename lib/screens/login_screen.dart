@@ -29,49 +29,57 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 72.0, bottom: 32),
-                child: SvgPicture.asset(ImageConstants.LOGIN_SCREEN_IMAGE_URL),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(32),
-              child: TextBox(
-                hintText: "+91 Phone Number",
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _phoneNumber = value;
-                  });
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: BottomButton(
-                child: Text(
-                  "Get OTP",
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 32.0, bottom: 32),
+                  child:
+                      SvgPicture.asset(ImageConstants.LOGIN_SCREEN_IMAGE_URL),
                 ),
-                onPressed: () => _onPhoneSignIn(_phoneNumber, context),
-                loadingState: _isLoading,
-                disabledState: false,
               ),
-            ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: AppFooter(),
-            ),
-            SizedBox(height: 16)
-          ],
+              Padding(
+                padding: EdgeInsets.all(32),
+                child: TextBox(
+                  hintText: "+91 Phone Number",
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _phoneNumber = value;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: BottomButton(
+                  child: Text(
+                    "Get OTP",
+                  ),
+                  onPressed: () => _onPhoneSignIn(_phoneNumber, context),
+                  loadingState: _isLoading,
+                  disabledState: false,
+                ),
+              ),
+            ],
+          ),
         ),
+      ),
+      // Footer
+      bottomSheet: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: AppFooter(),
+          ),
+          SizedBox(height: 16),
+        ],
       ),
     );
   }
@@ -80,10 +88,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _onPhoneSignIn(String phoneNumber, BuildContext context) async {
     // Set bottom button to loading state until SMS is sent
     setState(() {
+      FocusScope.of(context).unfocus();
       _isLoading = true;
     });
     // Check if the entered phone number is correct
     if (phoneNumber == null || phoneNumber.length != 10) {
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter a valid phone number.'),
@@ -156,7 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         //  If entered OTP is valid
         if (_errorMessage == null) {
-          Navigator.pushNamedAndRemoveUntil(context, "/wrapper", (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/wrapper", (route) => false);
         }
         // in case user has not entered OTP.
         else if (_errorMessage == "NOT_ENTERED") {

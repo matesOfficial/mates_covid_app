@@ -40,33 +40,46 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            children: [
-              // Header
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 32),
-                  child: SvgPicture.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Header
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 32),
+                    child:
+                        SvgPicture.asset(ImageConstants.OTP_SCREEN_IMAGE_URL),
+                  ),
                 ),
-              ),
-              MyPinInputTextField(onChanged: (pin) {
-                onEditingComplete(context, pin);
-                _pin = pin;
-              }),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0),
-                child: BottomButton(
-                  child: Text("Verify and proceed"),
-                  onPressed: () => onEditingComplete(context, _pin),
-                  loadingState: _loadingState,
-                  disabledState: false,
+                MyPinInputTextField(
+                  onChanged: (pin) {
+                    onEditingComplete(context, pin);
+                    _pin = pin;
+                  },
                 ),
-              ),
-              Spacer(),
-              AppFooter(),
-              SizedBox(height: 16),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 32.0),
+                  child: BottomButton(
+                    child: Text("Verify and proceed"),
+                    onPressed: () => onEditingComplete(context, _pin),
+                    loadingState: _loadingState,
+                    disabledState: false,
+                  ),
+                ),
+              ],
+            ),
           ),
+        ),
+        // Footer
+        bottomSheet: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: AppFooter(),
+            ),
+            SizedBox(height: 16),
+          ],
         ),
       ),
     );
@@ -77,6 +90,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (widget.fromDonorScreen == true) {
       if (pin.length == 6) {
         setState(() {
+          FocusScope.of(context).unfocus();
           _loadingState = true;
         });
         final UserProfileProvider userProfileProvider =

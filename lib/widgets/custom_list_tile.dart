@@ -1,10 +1,13 @@
 import 'package:covid_app/models/user_model.dart';
+import 'package:covid_app/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 
 class CustomListCard extends StatelessWidget {
   final UserProfile user;
   final bool isPlasma;
+
   CustomListCard({this.user, this.isPlasma});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,8 +36,7 @@ class CustomListCard extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  if (user.lastBloodDonationDate != null &&
-                      isPlasma == false)
+                  if (user.lastBloodDonationDate != null && isPlasma == false)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -42,8 +44,7 @@ class CustomListCard extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                  if (user.lastCovidPositiveDate != null &&
-                      isPlasma == true)
+                  if (user.lastCovidPositiveDate != null && isPlasma == true)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -82,29 +83,19 @@ class CustomListCard extends StatelessWidget {
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Color(0xffFAB550))),
                   ),
-                  if (user.lastBloodDonationDate != null &&
-                      isPlasma == false)
+                  if (user.lastBloodDonationDate != null && isPlasma == false)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                          user.lastBloodDonationDate
-                              .toDate()
-                              .toLocal()
-                              .toString()
-                              .split(' ')[0],
+                          DateFormatter.formatDate(user.lastBloodDonationDate),
                           style: TextStyle(color: Color(0xffFAB550)),
                           textAlign: TextAlign.right),
                     ),
-                  if (user.lastCovidPositiveDate != null &&
-                      isPlasma == true)
+                  if (user.lastCovidPositiveDate != null && isPlasma == true)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        user.lastCovidPositiveDate
-                            .toDate()
-                            .toLocal()
-                            .toString()
-                            .split(' ')[0],
+                        DateFormatter.formatDate(user.lastCovidPositiveDate),
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Color(0xffFAB550)),
                       ),

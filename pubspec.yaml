@@ -19,6 +19,7 @@ dependencies:
   uuid: ^2.2.2
   pin_input_text_field: ^4.0.0
   image_picker: ^0.7.4
+  url_launcher: ^6.0.3
   flutter_svg:
   # state management and dependency injection
   provider: ^5.0.0

@@ -149,14 +149,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      // if (widget.userType == "DONOR") {
-                      //   return Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => OxygenDonationFormScreen(),
-                      //     ),
-                      //   );
-                      // }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('This feature is coming soon!.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                     },
                     child: Card(
                         shape: RoundedRectangleBorder(
@@ -176,22 +174,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         )),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    color: Color(0xffFFFFFF),
-                    child: Column(
-                      children: [
-                        Padding(padding: EdgeInsets.all(10.0)),
-                        Image.asset(
-                          ImageConstants.consulting,
-                          width: 80,
-                          fit: BoxFit.contain,
+                  GestureDetector(
+                    onTap: (){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('This feature is coming soon!.'),
+                          backgroundColor: Colors.green,
                         ),
-                        Padding(padding: EdgeInsets.all(10.0)),
-                        Text("Consulting"),
-                      ],
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      color: Color(0xffFFFFFF),
+                      child: Column(
+                        children: [
+                          Padding(padding: EdgeInsets.all(10.0)),
+                          Image.asset(
+                            ImageConstants.consulting,
+                            width: 80,
+                            fit: BoxFit.contain,
+                          ),
+                          Padding(padding: EdgeInsets.all(10.0)),
+                          Text("Consulting"),
+                        ],
+                      ),
                     ),
                   ),
                 ],

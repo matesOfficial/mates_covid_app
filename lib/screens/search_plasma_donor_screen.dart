@@ -87,7 +87,7 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                   hintText: "State",
                   readOnly: true,
                   controller: _stateController,
-                  onTap: () => _showSelectStateDialog(context),
+                  onTap: () =>  _showSelectStateDialog(context),
                   suffixIcon: Icon(
                     Icons.arrow_drop_down,
                   ),
@@ -102,7 +102,7 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                   hintText: "City",
                   readOnly: true,
                   controller: _cityController,
-                  onTap: () => _showSelectCityDialog(context),
+                  onTap: () => _selectedState == null ? null : _showSelectCityDialog(context),
                   suffixIcon: Icon(
                     Icons.arrow_drop_down,
                   ),

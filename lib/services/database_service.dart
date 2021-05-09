@@ -1,6 +1,6 @@
 import 'package:covid_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class FirestoreDatabaseService {
   /// Firestore instance variable
@@ -53,6 +53,7 @@ class FirestoreDatabaseService {
           .collection('users')
           .where(donorType, isEqualTo: true)
           .where("city", isEqualTo: city)
+          .orderBy(timestampType, descending: false)
           .snapshots();
     }
     if (city == null && state != null) {
@@ -60,6 +61,7 @@ class FirestoreDatabaseService {
           .collection('users')
           .where(donorType, isEqualTo: true)
           .where("state", isEqualTo: state)
+          .orderBy(timestampType, descending: false)
           .snapshots();
     } 
     else if (city != null && state != null) {
@@ -68,11 +70,13 @@ class FirestoreDatabaseService {
           .where(donorType, isEqualTo: true)
           .where("city", isEqualTo: city)
           .where("state", isEqualTo: state)
+          .orderBy(timestampType, descending: false)
           .snapshots();
     }
     return FirebaseFirestore.instance
         .collection('users')
         .where(donorType, isEqualTo: true)
+        .orderBy(timestampType, descending: false)
         .snapshots();
     
   }

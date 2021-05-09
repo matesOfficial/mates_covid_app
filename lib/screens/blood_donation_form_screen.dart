@@ -123,7 +123,9 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
                     hintText: "City",
                     readOnly: true,
                     controller: _cityController,
-                    onTap: () => _showSelectCityDialog(context),
+                    onTap: () => userProfileProvider.userProfile.state == null
+                        ? null
+                        : _showSelectCityDialog(context),
                     suffixIcon: Icon(
                       Icons.arrow_drop_down,
                     ),
@@ -313,6 +315,9 @@ class _BloodDonationFormScreenState extends State<BloodDonationFormScreen> {
   Future<void> _onSubmitDetails(
       UserProfileProvider userProfileProvider, BuildContext context) async {
     if (!userProfileProvider.validateBloodDonationForm()) {
+      setState(() {
+        _isLoading = false;
+      });
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter all the details.'),
