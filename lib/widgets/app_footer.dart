@@ -31,9 +31,9 @@ class AppFooter extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
             this.screenType == "SPLASH_SCREEN" ? Container() : Spacer(),
-            SvgPicture.asset(
-              ImageConstants.LOGO_IMAGE_URL,
-              height: 49,
+            Image.asset(
+              ImageConstants.MAIT_LOGO_URL,
+              height: 59,
               fit: BoxFit.contain,
             ),
             Spacer(),

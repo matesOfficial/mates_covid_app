@@ -1,12 +1,15 @@
 import 'package:covid_app/constants/app_constants.dart';
+import 'package:covid_app/constants/url_constants.dart';
 import 'package:covid_app/global.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/otp_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/utils/date_formatter.dart';
+import 'package:covid_app/utils/url_launcher.dart';
 import 'package:covid_app/widgets/blood_drop_logo.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/multi_select_dialog.dart';
+import 'package:covid_app/widgets/my_ink_well.dart';
 import 'package:covid_app/widgets/text_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +27,7 @@ class PlasmaDonationFormScreen extends StatefulWidget {
 class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
   // loading state variable
   bool _isLoading = false;
+  bool _isEligible = false;
 
   // Text editing controllers
   TextEditingController _cityController = TextEditingController();
@@ -176,7 +180,7 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                     top: 16,
                     left: 32,
                     right: 32,
-                    bottom: 32,
+                    bottom: 4,
                   ),
                   child: TextBox(
                     hintText: "Date of COVID positive report",
@@ -191,6 +195,30 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: _isEligible,
+                        activeColor: Theme.of(context).primaryColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _isEligible = value;
+                          });
+                        },
+                      ),
+                      MyInkWell(
+                        onPressed: () {
+                          UrlLauncher.launchURL(UrlConstants.ELIGIBILITY_URL);
+                        },
+                        messageText: "I have checked the eligibility for  ",
+                        linkText: "Donating Plasma",
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(32),
                   child: BottomButton(
                     loadingState: _isLoading,
                     disabledState: false,
@@ -199,7 +227,6 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
                         _onSubmitDetails(userProfileProvider, context),
                   ),
                 ),
-                SizedBox(height: 32)
               ],
             ),
           ),
@@ -315,12 +342,17 @@ class _PlasmaDonationFormScreenState extends State<PlasmaDonationFormScreen> {
   Future<void> _onSubmitDetails(
       UserProfileProvider userProfileProvider, BuildContext context) async {
     if (!userProfileProvider.validatePlasmaForm()) {
-      setState(() {
-        _isLoading = false;
-      });
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter all the details.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    }
+    if (!_isEligible) {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please check the eligibility criteria before proceeding.'),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
