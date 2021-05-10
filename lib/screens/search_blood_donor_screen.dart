@@ -79,14 +79,11 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
     _scrollController.addListener(() {
       // Gives value of how far user can scroll
       double _maxScroll = _scrollController.position.maxScrollExtent;
-      //  print(_maxScroll);
-      // Current sceroll position of the user
+      // Current scroll position of the user
       double _currentScroll = _scrollController.position.pixels;
-
       // compare max scroll extent and current position
       //   double delta = MediaQuery.of(context).size.height * 10;
       if (_maxScroll == _currentScroll) {
-        print("scroll");
         Provider.of<UserProfileProvider>(context, listen: false)
             .getDonorListData("is_blood_donor", "last_blood_donation_date",
                 _selectedCity, _selectedState);
