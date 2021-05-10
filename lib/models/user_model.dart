@@ -99,9 +99,9 @@ class UserProfile {
     if (this.pinCode != null) data['pin_code'] = this.pinCode;
     if (this.matesAffiliation != null)
       data['mates_affiliation'] = this.matesAffiliation;
-    if (this.lastBloodDonationDate != null)
-      data['last_blood_donation_date'] = this.lastBloodDonationDate;
-    if (this.isPlasmaDonor != null) data['is_plasma_donor'] = this.isPlasmaDonor;
+    data['last_blood_donation_date'] = this.lastBloodDonationDate;
+    if (this.isPlasmaDonor != null)
+      data['is_plasma_donor'] = this.isPlasmaDonor;
     if (this.isBloodDonor != null) data['is_blood_donor'] = this.isBloodDonor;
     if (this.lastCovidPositiveDate != null)
       data['last_covid_positive_date'] = this.lastCovidPositiveDate;
