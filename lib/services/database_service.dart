@@ -1,3 +1,4 @@
+import 'package:covid_app/global.dart';
 import 'package:covid_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class FirestoreDatabaseService {
   }
 
   /// Create a new user profile in db
-  static Future<void> createNewUserProfile( String uid , UserProfile newUser) {
+  static Future<void> createNewUserProfile(String uid, UserProfile newUser) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -47,7 +48,10 @@ class FirestoreDatabaseService {
   }
 
   static Stream<QuerySnapshot> streamDonors(
-      {String city, String state, @required String donorType , @required String timestampType}) {
+      {String city,
+      String state,
+      @required String donorType,
+      @required String timestampType}) {
     if (city != null && state == null) {
       return FirebaseFirestore.instance
           .collection('users')
@@ -63,8 +67,7 @@ class FirestoreDatabaseService {
           .where("state", isEqualTo: state)
           .orderBy(timestampType, descending: false)
           .snapshots();
-    } 
-    else if (city != null && state != null) {
+    } else if (city != null && state != null) {
       return FirebaseFirestore.instance
           .collection('users')
           .where(donorType, isEqualTo: true)
@@ -78,6 +81,86 @@ class FirestoreDatabaseService {
         .where(donorType, isEqualTo: true)
         .orderBy(timestampType, descending: false)
         .snapshots();
-    
+  }
+
+  static Future<QuerySnapshot> getDonorsList(
+      {String city,
+      String state,
+      @required String donorType,
+      @required String timestampType,
+      DocumentSnapshot lastDocument}) {
+    if (lastDocument == null) {
+      if (city != null && state == null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("city", isEqualTo: city)
+            .orderBy(timestampType, descending: false)
+            .limit(4)
+            .get();
+      }
+      if (city == null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("state", isEqualTo: state)
+            .orderBy(timestampType, descending: false)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      } else if (city != null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("city", isEqualTo: city)
+            .where("state", isEqualTo: state)
+            .orderBy(timestampType, descending: false)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      }
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where(donorType, isEqualTo: true)
+          .orderBy(timestampType, descending: false)
+          .limit( DONORS_LIST_PAGINATION_LIMIT )
+          .get();
+    } else {
+      if (city != null && state == null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("city", isEqualTo: city)
+            .orderBy(timestampType, descending: false)
+            .startAfterDocument(lastDocument)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      }
+      if (city == null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("state", isEqualTo: state)
+            .orderBy(timestampType, descending: false)
+            .startAfterDocument(lastDocument)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      } else if (city != null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .where(donorType, isEqualTo: true)
+            .where("city", isEqualTo: city)
+            .where("state", isEqualTo: state)
+            .orderBy(timestampType, descending: false)
+            .startAfterDocument(lastDocument)
+            .limit( DONORS_LIST_PAGINATION_LIMIT)
+            .get();
+      }
+      return FirebaseFirestore.instance
+          .collection('users')
+          .where(donorType, isEqualTo: true)
+          .orderBy(timestampType, descending: false)
+          .startAfterDocument(lastDocument)
+          .limit( DONORS_LIST_PAGINATION_LIMIT )
+          .get();
+    }
   }
 }

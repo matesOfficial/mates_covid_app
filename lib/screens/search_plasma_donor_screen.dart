@@ -1,6 +1,7 @@
-import 'package:covid_app/services/database_service.dart';
+import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/widgets/custom_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/app_constants.dart';
 import '../models/user_model.dart';
 import '../widgets/multi_select_dialog.dart';
@@ -15,6 +16,8 @@ class SearchPlasmaDonorScreen extends StatefulWidget {
 class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
   TextEditingController _cityController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+
 
   String _selectedCity;
   String _selectedState;
@@ -31,8 +34,11 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 text: e,
                 onPressed: () {
                   setState(() {
+                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
                     _selectedState = e;
                     _stateController.text = e;
+                    _cityController.text = "";
+                    _selectedCity = null;
                   });
                   Navigator.pop(context);
                 },
@@ -54,6 +60,8 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 text: e,
                 onPressed: () {
                   setState(() {
+                    // reset user profile provider
+                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
                     _cityController.text = e;
                     _selectedCity = e;
                   });
@@ -67,15 +75,50 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      // Gives value of how far user can scroll
+      double _maxScroll = _scrollController.position.maxScrollExtent;
+      //  print(_maxScroll);
+      // Current sceroll position of the user
+      double _currentScroll = _scrollController.position.pixels;
+
+      // compare max scroll extent and current position
+      //   double delta = MediaQuery.of(context).size.height * 10;
+      if (_maxScroll == _currentScroll) {
+        print("scroll");
+        Provider.of<UserProfileProvider>(context, listen: false)
+            .getDonorListData("is_plasma_donor", "last_covid_positive_date",
+            _selectedCity, _selectedState);
+      }
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    // user profile provider
+    final UserProfileProvider userProfileProvider =
+    Provider.of<UserProfileProvider>(context, listen: false);
+    // call get donors list function
+    userProfileProvider.getDonorListData("is_plasma_donor",
+        "last_covid_positive_date", _selectedCity, _selectedState);
+    // return page
+    return WillPopScope(
+      onWillPop: (){
+        userProfileProvider.resetProvider();
+        Navigator.pop(context);
+        return null;
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
           title: Text("Plasma Donors"),
         ),
-        // TODO: Re-factor this code, shift firebase query to database services
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               Padding(
@@ -87,7 +130,7 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                   hintText: "State",
                   readOnly: true,
                   controller: _stateController,
-                  onTap: () =>  _showSelectStateDialog(context),
+                  onTap: () => _showSelectStateDialog(context),
                   suffixIcon: Icon(
                     Icons.arrow_drop_down,
                   ),
@@ -102,83 +145,59 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                   hintText: "City",
                   readOnly: true,
                   controller: _cityController,
-                  onTap: () => _selectedState == null ? null : _showSelectCityDialog(context),
+                  onTap: () => _selectedState == null
+                      ? null
+                      : _showSelectCityDialog(context),
                   suffixIcon: Icon(
                     Icons.arrow_drop_down,
                   ),
                 ),
               ),
-              StreamBuilder(
-                  stream: FirestoreDatabaseService.streamDonors(
-                    donorType: "is_plasma_donor",
-                    timestampType: "last_covid_positive_date",
-                    city: _selectedCity,
-                    state: _selectedState,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-
-                    if (snapshot.data == null) {
-                      return Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                          ),
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                "We are currently unable to find donors in your area. Hold on till something nice pops up!",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
+              Consumer<UserProfileProvider>(
+                builder: (context, userProfileProvider, child) {
+                  if (userProfileProvider.donorsList.isEmpty &&
+                      userProfileProvider.isGettingDonorListData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (userProfileProvider.donorsList.isEmpty &&
+                      !userProfileProvider.isGettingDonorListData) {
+                    return Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              "We are currently unable to find donors in your area. Hold on till something nice pops up!",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
-                        ],
-                      );
-                    }
-                    if (snapshot.data.docs.length == 0)
-                      return Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                          ),
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                "We are currently unable to find donors in your area. Hold on till something nice pops up!",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    var snapshotData = snapshot.data.docs;
-                    List<UserProfile> userProfiles =
-                        List.from(snapshotData.map((doc) {
-                      return UserProfile.fromJson(doc.data());
-                    }));
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: userProfiles.length,
-                      itemBuilder: (context, index) {
-                        UserProfile user = userProfiles[index];
-                        return CustomListCard(
-                          user: user,
-                          isPlasma: true,
-                        );
-                      },
+                        ),
+                      ],
                     );
-                  })
+                  }
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: userProfileProvider.donorsList.length,
+                    itemBuilder: (context, index) {
+                      UserProfile user = userProfileProvider.donorsList[index];
+                      return CustomListCard(
+                        user: user,
+                        isPlasma: false,
+                      );
+                    },
+                  );
+                },
+              )
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
