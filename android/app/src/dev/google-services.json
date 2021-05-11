@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "739425786502",
+    "project_id": "covid-app-dev",
+    "storage_bucket": "covid-app-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739425786502:android:255d2723d7a33818cd8f07",
+        "android_client_info": {
+          "package_name": "com.genxtechnologies.covid_app_dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739425786502-usq5ki1qin17dbp4jsms2qahqkl8h1dq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.genxtechnologies.covid_app_dev",
+            "certificate_hash": "f8b57beb91d720f9df74928c2e94943fa0123bf4"
+          }
+        },
+        {
+          "client_id": "739425786502-65mg86hl9bkl8ldpbjkbvmdqviv6pr4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyB6jwxp-hmYQFhXEDQktwirUt5ES4_n8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739425786502-65mg86hl9bkl8ldpbjkbvmdqviv6pr4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

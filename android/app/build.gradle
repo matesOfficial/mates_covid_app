@@ -70,6 +70,22 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "Mates Warriors"
+            applicationId "com.genxtechnologies.covid_app_dev"
+            versionNameSuffix "-dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", "Mates Warriors"
+        }
+    }
+
 }
 
 flutter {
