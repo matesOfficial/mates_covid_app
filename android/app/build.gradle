@@ -83,6 +83,7 @@ android {
         prod {
             dimension "app"
             resValue "string", "app_name", "Mates Warriors"
+            applicationId "com.genxtechnologies.covid_app"
         }
     }
 

@@ -13,6 +13,7 @@ class DonorReceiverScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header
               Center(
