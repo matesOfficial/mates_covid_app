@@ -109,10 +109,10 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Blood Donors"),
-        ),
+        // appBar: AppBar(
+        //   centerTitle: true,
+        //   title: Text("Blood Donors"),
+        // ),
         body: SingleChildScrollView(
           controller: _scrollController,
           child: Column(

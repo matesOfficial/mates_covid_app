@@ -2,14 +2,12 @@ import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/global.dart';
 import 'package:covid_app/screens/otp_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
-import 'package:covid_app/services/navigation_service.dart';
 import 'package:covid_app/widgets/app_footer.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:covid_app/widgets/text_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -22,6 +22,7 @@ class ThemeUtils {
           ),
         ),
       ),
+
       floatingActionButtonTheme:
           FloatingActionButtonThemeData(backgroundColor: primaryColor),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

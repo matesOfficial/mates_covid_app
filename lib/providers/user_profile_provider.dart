@@ -4,14 +4,41 @@ import 'package:covid_app/models/user_model.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:covid_app/services/database_service.dart';
 import 'package:covid_app/utils/date_formatter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   UserProfile userProfile = UserProfile();
   List<UserProfile> donorsList = List<UserProfile>.empty(growable: true);
-  DocumentSnapshot _lastDocumet;
+  DocumentSnapshot _lastDocument;
   bool _hasMore = true;
+  // user profile data fetched from firebase
+  UserProfile userProfileStream = UserProfile();
+  // Private variable to check if the user stream is currently in loading state
+  bool _isUserStreamLoading = true;
+  // Getter for user stream
+  bool get isUserStreamLoading =>_isUserStreamLoading;
 
+
+
+
+  UserProfileProvider() {
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user == null || user.uid == null) {
+        // User is not logged in
+        userProfileStream = null;
+        notifyListeners();
+        return;
+      }
+
+      // Stream user detail, update data when receive new data
+      FirestoreDatabaseService.streamUser(user.uid).listen((event) {
+        userProfileStream = event;
+        _isUserStreamLoading = false;
+        notifyListeners();
+      });
+    });
+  }
   // private variable to fetch data of donors.
   bool _isGettingDonorListData = false;
 
@@ -134,7 +161,7 @@ class UserProfileProvider extends ChangeNotifier {
       timestampType: timestampType,
       city: city,
       state: state,
-      lastDocument: _lastDocumet
+      lastDocument: _lastDocument
     );
     _hasMore = snapshot.docs != null && snapshot.docs.length != 0;
     if (_hasMore == false) {
@@ -147,7 +174,7 @@ class UserProfileProvider extends ChangeNotifier {
     donorsList.addAll(
         snapshot.docs.map((e) => UserProfile.fromJson(e.data()))
     );
-    _lastDocumet = snapshot.docs.last;
+    _lastDocument = snapshot.docs.last;
     _isGettingDonorListData = false;
     notifyListeners();
   }
@@ -156,7 +183,7 @@ class UserProfileProvider extends ChangeNotifier {
     this.userProfile = UserProfile();
     donorsList.clear();
     _hasMore = true;
-    _lastDocumet = null;
+    _lastDocument = null;
     notifyListeners();
   }
 }

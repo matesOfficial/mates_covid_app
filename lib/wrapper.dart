@@ -1,5 +1,6 @@
 import 'package:covid_app/models/user_model.dart';
 import 'package:covid_app/screens/donor_receiver_screen.dart';
+import 'package:covid_app/screens/home_screen.dart';
 import 'package:covid_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,6 @@ class Wrapper extends StatelessWidget {
     if(user.uid == null){
       return LoginScreen();
     }
-    return DonorReceiverScreen();
+    return HomeScreen();
   }
 }
