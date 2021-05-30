@@ -32,9 +32,7 @@ class DonorReceiverScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DashboardScreen(
-                        userType: "RECEIVER",
-                      ),
+                      builder: (context) => DashboardScreen(),
                     ),
                   );
                 },
@@ -49,9 +47,7 @@ class DonorReceiverScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DashboardScreen(
-                          userType: "DONOR",
-                        ),
+                        builder: (context) => DashboardScreen(),
                       ),
                     );
                   },

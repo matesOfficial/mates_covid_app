@@ -1,6 +1,8 @@
+import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/search_blood_donor_screen.dart';
 import 'package:covid_app/screens/search_plasma_donor_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchDonorsScreen extends StatelessWidget {
   const SearchDonorsScreen({Key key}) : super(key: key);
@@ -14,6 +16,10 @@ class SearchDonorsScreen extends StatelessWidget {
           centerTitle: true,
           title: Text("Search Donors"),
           bottom: TabBar(
+            onTap: (value) {
+              Provider.of<UserProfileProvider>(context, listen: false)
+                  .resetProvider();
+            },
             tabs: [
               Tab(
                 text: "Oxygen",
@@ -28,6 +34,7 @@ class SearchDonorsScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             SearchBloodDonorScreen(),
             SearchBloodDonorScreen(),

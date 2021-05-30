@@ -10,10 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
-  // can have value as DONOR or RECEIVER
-  final String userType;
-
-  DashboardScreen({@required this.userType});
+  const DashboardScreen({Key key}) : super(key: key);
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -29,9 +26,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return LoadingScreen();
     }
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -69,9 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: EdgeInsets.all(16.0),
             ),
             Text(
-              widget.userType == "RECEIVER"
-                  ? "I am looking for"
-                  : "I want to donate",
+              "I want to donate",
             ),
             Padding(
               padding: EdgeInsets.all(5.0),
@@ -84,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: <Widget>[
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       if (userProfileProvider.userProfileStream.isBloodDonor ==
                           true) {
@@ -97,22 +89,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                       }
-                      if (widget.userType == "DONOR") {
                         return Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BloodDonationFormScreen(),
                           ),
                         );
-                      }
-                      if (widget.userType == "RECEIVER") {
-                        return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SearchBloodDonorScreen(),
-                          ),
-                        );
-                      }
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -133,7 +115,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       if (userProfileProvider.userProfileStream.isPlasmaDonor ==
                           true) {
@@ -146,22 +128,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                       }
-                      if (widget.userType == "DONOR") {
                         return Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => PlasmaDonationFormScreen(),
                           ),
                         );
-                      }
-                      if (widget.userType == "RECEIVER") {
-                        return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SearchPlasmaDonorScreen(),
-                          ),
-                        );
-                      }
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -182,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -209,7 +181,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         )),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
