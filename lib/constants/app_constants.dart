@@ -28,7 +28,7 @@ class AppConstants {
 
   static const List<String> FREE_PAID = [
     "Free",
-    "paid",
+    "Paid",
   ];
 
   static const List<String> HOME_DELIVERY = [
