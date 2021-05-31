@@ -1,5 +1,5 @@
 import 'package:covid_app/constants/image_constants.dart';
-//import 'package:covid_app/constants/url_constants.dart';
+import 'package:covid_app/screens/consultation/pharmacist_registration_form.dart';
 import 'package:covid_app/widgets/bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/screens/consultation/doctor_registration_form.dart';
@@ -46,7 +46,7 @@ class ConsultancyBridge extends StatelessWidget {
                     return Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DoctorRegistrationScreen(),
+                        builder: (context) => PharmacistRegistrationScreen(),
                       ),
                     );
                   },
