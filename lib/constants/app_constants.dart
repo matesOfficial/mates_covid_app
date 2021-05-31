@@ -1,4 +1,47 @@
 class AppConstants {
+  static const List<String> DOCTOR_SPECIALIZATION = [
+    "Surgeon",
+    "Physician",
+    "Dermatologist",
+    "Cardiologist",
+    "Endocrinologist",
+    "Neurologist",
+    "Allergist/Immunologist",
+    "Psychiatrist",
+    "Nephrologist",
+    "Podiatrist",
+    "Pediatrician",
+    "Endocrinologist",
+    "Neurologist",
+    "Rheumatologist",
+    "obstetrician/gynecologist",
+    "Pulmonologist",
+    "Ophthalmologist",
+    "Oncologist",
+    "Urologist",
+    "Otolaryngologist",
+    "Anesthesiologist",
+    "Radiologist",
+    "Gastroenterologist",
+    "Orthopedist",
+  ];
+
+  static const List<String> FREE_PAID = [
+    "Free",
+    "paid",
+  ];
+
+  static const List<String> HOME_DELIVERY = [
+    "Yes",
+    "No",
+  ];
+
+  static const List<String> OPERATING_HOURS = [
+    "6-8 Hours",
+    "8-12 Hours",
+    "24 Hours",
+  ];
+
   static const List<String> BLOOD_GROUP_LIST = [
     "A+",
     "A-",
