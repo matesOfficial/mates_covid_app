@@ -1,12 +1,15 @@
+import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/widgets/profile_info_tile.dart';
 import 'package:covid_app/widgets/display_picture.dart';
 import 'package:covid_app/theme/style.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+        final UserProfileProvider userProfileProvider = Provider.of<UserProfileProvider>(context);
     // TODO Change font-sizes in style.dart
     // Header starts here.
     return Scaffold(
@@ -30,8 +33,9 @@ class UserProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      userProfileProvider.userProfileStream.name == null ? Container() :
                       Text(
-                        "Atishay Jain",
+                        userProfileProvider.userProfile.name,
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
@@ -39,7 +43,7 @@ class UserProfileScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "+91 9497756473",
+                        userProfileProvider.userProfileStream.phoneNumber,
                         style: Theme.of(context).textTheme.subtitle1.copyWith(
                             color: Colors.black,
                             fontSize: 16,

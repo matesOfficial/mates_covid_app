@@ -317,6 +317,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
     setState(() {
       _isLoading = false;
     });
+    doctorProvider.resetProvider();
     Navigator.pushNamedAndRemoveUntil(
         context, '/confirmation_screen', (route) => false);
   }

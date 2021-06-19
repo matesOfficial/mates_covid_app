@@ -1,4 +1,6 @@
+import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileInfoTile extends StatelessWidget {
   final String title;
@@ -15,6 +17,7 @@ class ProfileInfoTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    
     // TODO Change font-sizes in style.dart
     return InkWell(
       onTap: () => !isClickable ? null : onPressed(),

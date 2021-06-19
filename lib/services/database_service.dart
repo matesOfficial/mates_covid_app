@@ -1,5 +1,6 @@
 import 'package:covid_app/global.dart';
 import 'package:covid_app/models/doctor_model.dart';
+import 'package:covid_app/models/pharmacy_model.dart';
 import 'package:covid_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -169,5 +170,10 @@ class FirestoreDatabaseService {
   static Future<void> updateDoctorInfo(DoctorModel doctorModel){
       return FirebaseFirestore.instance.collection("doctors").add(doctorModel.toJson());
   }
+
+ /// Upload pharmacy model information to database
+ static Future<void> updatePharmacyInfo(PharmacyModel pharmacyModel){
+   return FirebaseFirestore.instance.collection("pharmacies").add(pharmacyModel.toJson());
+ }
 
 }
