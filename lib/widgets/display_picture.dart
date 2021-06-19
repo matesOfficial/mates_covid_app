@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 class DisplayPicture extends StatelessWidget {
   final String displayImageUrl;
+
   DisplayPicture({this.displayImageUrl});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundImage: AssetImage(displayImageUrl),
+          backgroundImage:
+              displayImageUrl == null ? null : AssetImage(displayImageUrl),
         ),
         Positioned(
           bottom: 0,
