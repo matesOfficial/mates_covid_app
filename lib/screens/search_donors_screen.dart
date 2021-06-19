@@ -10,7 +10,7 @@ class SearchDonorsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -21,9 +21,6 @@ class SearchDonorsScreen extends StatelessWidget {
                   .resetProvider();
             },
             tabs: [
-              Tab(
-                text: "Oxygen",
-              ),
               Tab(
                 text: "Blood",
               ),
@@ -36,7 +33,6 @@ class SearchDonorsScreen extends StatelessWidget {
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
-            SearchBloodDonorScreen(),
             SearchBloodDonorScreen(),
             SearchPlasmaDonorScreen()
           ],

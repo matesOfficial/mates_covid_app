@@ -1,6 +1,7 @@
 import 'package:covid_app/constants/app_constants.dart';
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/global.dart';
+import 'package:covid_app/providers/doctor_provider.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/otp_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
@@ -23,39 +24,31 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   // loading state variable
   bool _isLoading = false;
 
-  // Text editing controllers
-  // TextEditingController _stateController = TextEditingController();
-  // TextEditingController _cityController = TextEditingController();
-  // TextEditingController _specalizationController = TextEditingController();
-  // TextEditingController _feeController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _bloodGroupController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
-  TextEditingController _collegeController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
+  // text editng controllers
+  TextEditingController _nameController = new TextEditingController();
+  TextEditingController _cityController = new TextEditingController();
+  TextEditingController _stateController = new TextEditingController();
+  TextEditingController _phoneController = new TextEditingController();
+  TextEditingController _specializationController = new TextEditingController();
+  TextEditingController _serviceTypeController = new TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
-    // Text Theme
-    TextTheme textTheme = Theme.of(context).textTheme;
-
     // user profile provider
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context);
+    final DoctorProvider doctorProvider = Provider.of<DoctorProvider>(context);
     // Set text for controllers
-    _cityController.text = userProfileProvider.userProfile.city ?? "";
-    _bloodGroupController.text =
-        userProfileProvider.userProfile.bloodGroup ?? "";
-    _collegeController.text =
-        userProfileProvider.userProfile.matesAffiliation ?? "";
-    _dateController.text = DateFormatter.formatDate(
-            userProfileProvider.userProfile.lastBloodDonationDate) ??
-        "";
-    _stateController.text = userProfileProvider.userProfile.state ?? "";
+    _nameController.text = doctorProvider.doctorModel.name;
+    _cityController.text = doctorProvider.doctorModel.city;
+    _stateController.text = doctorProvider.doctorModel.state;
+    _serviceTypeController.text = doctorProvider.doctorModel.serviceType;
+    _specializationController.text = doctorProvider.doctorModel.specialization;
+    _phoneController.text = doctorProvider.doctorModel.phoneNumber;
+
 
     return WillPopScope(
       onWillPop: () {
-        userProfileProvider.resetProvider();
+        doctorProvider.resetProvider();
         Navigator.pop(context);
         return null;
       },
@@ -86,7 +79,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                     hintText: "Name",
                     textCapitalization: TextCapitalization.words,
                     keyboardType: TextInputType.name,
-                    onChanged: (value) => userProfileProvider.updateName(value),
+                    onChanged: (value) => doctorProvider.updateName(value),
                   ),
                 ),
                 Padding(
@@ -113,7 +106,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                     hintText: "City",
                     readOnly: true,
                     controller: _cityController,
-                    onTap: () => userProfileProvider.userProfile.state == null
+                    onTap: () => doctorProvider.doctorModel.state == null
                         ? null
                         : _showSelectCityDialog(context),
                     suffixIcon: Icon(
@@ -133,8 +126,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(6),
                     ],
-                    onChanged: (value) =>
-                        userProfileProvider.updatePinCode(value),
+                    onChanged: (value) => doctorProvider.updatePinCode(value),
                   ),
                 ),
                 Padding(
@@ -149,7 +141,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     onChanged: (value) =>
-                        userProfileProvider.updatePhoneNumber(value),
+                        doctorProvider.updatePhoneNumber(value),
                   ),
                 ),
                 Padding(
@@ -160,7 +152,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                   child: TextBox(
                     hintText: "Specialization",
                     keyboardType: TextInputType.name,
-                    controller: _bloodGroupController,
+                    controller: _specializationController,
                     readOnly: true,
                     onTap: () => _showSpecializationDialog(context),
                     suffixIcon: Icon(
@@ -176,7 +168,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                   child: TextBox(
                     hintText: "Paid/Free",
                     readOnly: true,
-                    controller: _collegeController,
+                    controller: _serviceTypeController,
                     onTap: () => _showFreePaidDialog(context),
                     suffixIcon: Icon(
                       Icons.arrow_drop_down,
@@ -189,10 +181,10 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                     horizontal: 32,
                   ),
                   child: TextBox(
+                    onChanged: (value) => doctorProvider.updateAssociatedHospital(value),
                     hintText: "Hospital Associated With",
                     textCapitalization: TextCapitalization.words,
                     keyboardType: TextInputType.name,
-                    // onChanged: (value) => userProfileProvider.updateName(value),
                   ),
                 ),
                 Padding(
@@ -202,8 +194,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                     loadingState: _isLoading,
                     disabledState: false,
                     child: Text("Continue"),
-                    onPressed: () =>
-                        _onSubmitDetails(userProfileProvider, context),
+                    onPressed: () => _onSubmitDetails(doctorProvider, context),
                   ),
                 ),
                 SizedBox(height: 32)
@@ -216,8 +207,8 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   }
 
   Future<void> _showSpecializationDialog(BuildContext context) {
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    final DoctorProvider doctorProvider =
+        Provider.of<DoctorProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -227,7 +218,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
               (e) => MultiSelectDialogItem(
                 text: e,
                 onPressed: () {
-                  userProfileProvider.updateBloodGroup(e);
+                  doctorProvider.updateSpecialization(e);
                   Navigator.pop(context);
                 },
               ),
@@ -238,8 +229,8 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   }
 
   Future<void> _showSelectStateDialog(BuildContext context) {
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    final DoctorProvider doctorProvider =
+        Provider.of<DoctorProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -250,7 +241,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
               (e) => MultiSelectDialogItem(
                 text: e,
                 onPressed: () {
-                  userProfileProvider.updateStateName(e);
+                  doctorProvider.updateStateName(e);
                   Navigator.pop(context);
                 },
               ),
@@ -261,8 +252,8 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   }
 
   Future<void> _showFreePaidDialog(BuildContext context) {
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    final DoctorProvider doctorProvider =
+        Provider.of<DoctorProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
@@ -272,7 +263,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
               (e) => MultiSelectDialogItem(
                 text: e,
                 onPressed: () {
-                  userProfileProvider.updateCollegeName(e);
+                  doctorProvider.updateServiceType(e);
                   Navigator.pop(context);
                 },
               ),
@@ -283,45 +274,31 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   }
 
   Future<void> _showSelectCityDialog(BuildContext context) {
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
+    final DoctorProvider doctorProvider =
+        Provider.of<DoctorProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (context) => MultiSelectDialog(
         title: "Select your city name",
-        children: AppConstants
-            .STATES_CITIES_MAP[userProfileProvider.userProfile.state]
-            .map(
-              (e) => MultiSelectDialogItem(
-                text: e,
-                onPressed: () {
-                  userProfileProvider.updateCityName(e);
-                  Navigator.pop(context);
-                },
-              ),
-            )
-            .toList(),
+        children:
+            AppConstants.STATES_CITIES_MAP[doctorProvider.doctorModel.state]
+                .map(
+                  (e) => MultiSelectDialogItem(
+                    text: e,
+                    onPressed: () {
+                      doctorProvider.updateCityName(e);
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .toList(),
       ),
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final UserProfileProvider userProfileProvider =
-        Provider.of<UserProfileProvider>(context, listen: false);
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      userProfileProvider.getLastBloodDonationDate(picked);
-    }
-  }
-
   Future<void> _onSubmitDetails(
-      UserProfileProvider userProfileProvider, BuildContext context) async {
-    if (!userProfileProvider.validateBloodDonationForm()) {
+      DoctorProvider doctorProvider, BuildContext context) async {
+    if (!doctorProvider.validateForm()) {
       setState(() {
         _isLoading = false;
       });
@@ -335,80 +312,12 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
     setState(() {
       _isLoading = true;
     });
-
-    /// OTP verification method
-    return AuthService.signInWithPhone(
-      "${userProfileProvider.userProfile.phoneNumber}",
-
-      /// Callbacks
-      onAutoPhoneVerificationCompleted: (AuthCredential credential) async {
-        String _errorMessage = await AuthService.loginForDonors(
-            credential, userProfileProvider.userProfile);
-        // Conditions to validate error message
-        if (_errorMessage == null) {
-          userProfileProvider.resetProvider();
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/confirmation_screen', (route) => false);
-        }
-        // Display error message in case of invalid OTP.
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(_errorMessage),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
-      },
-
-      /// Fired when auto phone verification gets failed
-      onPhoneVerificationFailed: (FirebaseAuthException e) {
-        logger.w(e.message);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AuthService.getMessageFromErrorCode(e.code)),
-            backgroundColor: Theme.of(context).errorColor,
-          ),
-        );
-      },
-
-      /// Fired when the code is sent from server
-      onPhoneCodeSent: (String verificationId, [int forceCodeResend]) async {
-        // turn off the loading state of button upon successful login
-        setState(() {
-          _isLoading = false;
-        });
-        // Go to OTP screen to input the OTP and verify if entered OTP was correct
-        String _errorMessage = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpScreen(
-              verificationId: verificationId,
-              fromDonorScreen: true,
-            ),
-          ),
-        );
-        logger..d(_errorMessage);
-        //  If entered OTP is valid
-        if (_errorMessage == null) {
-          userProfileProvider.resetProvider();
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/confirmation_screen', (route) => false);
-        }
-        // in case user has not entered OTP.
-        else if (_errorMessage == "NOT_ENTERED") {
-          return;
-        }
-        // Display error message in case of invalid OTP.
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(_errorMessage),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
-      },
-    );
+    // update doctor information to database
+    await doctorProvider.updateDoctorInfo();
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/confirmation_screen', (route) => false);
   }
 }

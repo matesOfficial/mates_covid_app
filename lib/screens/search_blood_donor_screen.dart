@@ -33,7 +33,8 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
                 onPressed: () {
                   setState(() {
                     // reset user profile provider
-                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
+                    Provider.of<UserProfileProvider>(context, listen: false)
+                        .resetProvider();
                     _selectedState = e;
                     _stateController.text = e;
                     _cityController.text = "";
@@ -60,7 +61,8 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
                 onPressed: () {
                   setState(() {
                     // reset user profile provider
-                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
+                    Provider.of<UserProfileProvider>(context, listen: false)
+                        .resetProvider();
                     _cityController.text = e;
                     _selectedCity = e;
                   });
@@ -102,17 +104,13 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
         "last_blood_donation_date", _selectedCity, _selectedState);
     // return page
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         userProfileProvider.resetProvider();
         Navigator.pop(context);
         return null;
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   centerTitle: true,
-        //   title: Text("Blood Donors"),
-        // ),
         body: SingleChildScrollView(
           controller: _scrollController,
           child: Column(
@@ -153,7 +151,13 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
                 builder: (context, userProfileProvider, child) {
                   if (userProfileProvider.donorsList.isEmpty &&
                       userProfileProvider.isGettingDonorListData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    );
                   }
                   if (userProfileProvider.donorsList.isEmpty &&
                       userProfileProvider.isGettingDonorListData == false) {
@@ -164,7 +168,8 @@ class _SearchBloodDonorScreenState extends State<SearchBloodDonorScreen> {
                         ),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             child: Text(
                               "We are currently unable to find donors in your area. Hold on till something nice pops up!",
                               textAlign: TextAlign.center,

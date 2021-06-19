@@ -38,7 +38,6 @@ class _PharmacistRegistrationScreenState
   @override
   Widget build(BuildContext context) {
     // Text Theme
-    TextTheme textTheme = Theme.of(context).textTheme;
     // user profile provider
     final UserProfileProvider userProfileProvider =
         Provider.of<UserProfileProvider>(context);

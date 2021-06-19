@@ -18,7 +18,6 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
   TextEditingController _stateController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
-
   String _selectedCity;
   String _selectedState;
 
@@ -34,7 +33,8 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 text: e,
                 onPressed: () {
                   setState(() {
-                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
+                    Provider.of<UserProfileProvider>(context, listen: false)
+                        .resetProvider();
                     _selectedState = e;
                     _stateController.text = e;
                     _cityController.text = "";
@@ -61,7 +61,8 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 onPressed: () {
                   setState(() {
                     // reset user profile provider
-                    Provider.of<UserProfileProvider>(context, listen: false).resetProvider();
+                    Provider.of<UserProfileProvider>(context, listen: false)
+                        .resetProvider();
                     _cityController.text = e;
                     _selectedCity = e;
                   });
@@ -90,23 +91,22 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
         print("scroll");
         Provider.of<UserProfileProvider>(context, listen: false)
             .getDonorListData("is_plasma_donor", "last_covid_positive_date",
-            _selectedCity, _selectedState);
+                _selectedCity, _selectedState);
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     // user profile provider
     final UserProfileProvider userProfileProvider =
-    Provider.of<UserProfileProvider>(context, listen: false);
+        Provider.of<UserProfileProvider>(context, listen: false);
     // call get donors list function
     userProfileProvider.getDonorListData("is_plasma_donor",
         "last_covid_positive_date", _selectedCity, _selectedState);
     // return page
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         userProfileProvider.resetProvider();
         Navigator.pop(context);
         return null;
@@ -157,7 +157,13 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                 builder: (context, userProfileProvider, child) {
                   if (userProfileProvider.donorsList.isEmpty &&
                       userProfileProvider.isGettingDonorListData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    );
                   }
                   if (userProfileProvider.donorsList.isEmpty &&
                       !userProfileProvider.isGettingDonorListData) {
@@ -168,7 +174,8 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
                         ),
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             child: Text(
                               "We are currently unable to find donors in your area. Hold on till something nice pops up!",
                               textAlign: TextAlign.center,

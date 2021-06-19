@@ -2,10 +2,9 @@ import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/already_registered_donor_screen.dart';
 import 'package:covid_app/screens/blood_donation_form_screen.dart';
+import 'package:covid_app/screens/consultation/consulting_bridge.dart';
 import 'package:covid_app/screens/loading_screen.dart';
 import 'package:covid_app/screens/plasma_donation_form_screen.dart';
-import 'package:covid_app/screens/search_blood_donor_screen.dart';
-import 'package:covid_app/screens/search_plasma_donor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -89,12 +88,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                       }
-                        return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BloodDonationFormScreen(),
-                          ),
-                        );
+                      return Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BloodDonationFormScreen(),
+                        ),
+                      );
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -128,12 +127,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         );
                       }
-                        return Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlasmaDonationFormScreen(),
-                          ),
-                        );
+                      return Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlasmaDonationFormScreen(),
+                        ),
+                      );
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -183,10 +182,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('This feature is coming soon!.'),
-                          backgroundColor: Colors.green,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConsultancyBridge(),
                         ),
                       );
                     },

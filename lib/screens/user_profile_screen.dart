@@ -1,3 +1,4 @@
+import 'package:covid_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/widgets/profile_info_tile.dart';
 import 'package:covid_app/widgets/display_picture.dart';
@@ -23,9 +24,7 @@ class UserProfileScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  DisplayPicture(
-                    displayImageUrl: "assets/images/my_photo.jpg",
-                  ),
+                  DisplayPicture(),
                   Spacer(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -69,32 +68,13 @@ class UserProfileScreen extends StatelessWidget {
                 ),
               ),
               ProfileInfoTile(
-                title: "Adhaar Number",
-                value: "38XXXXX234",
-                isClickable: false,
-              ),
-              ProfileInfoTile(
-                title: "Height",
-                value: "183 cms",
-                isClickable: true,
-              ),
-              ProfileInfoTile(
-                title: "Weight",
-                value: "62.5 Kgs",
-                isClickable: true,
-              ),
-              ProfileInfoTile(
-                title: "Health History",
-                subHeading: "Diabties, Hyper Tension, Neurone Disease",
-                isClickable: false,
-              ),
-              ProfileInfoTile(
-                title: "Update Password",
+                title: "View donor history",
                 isClickable: true,
               ),
               ProfileInfoTile(
                 title: "Log Out",
                 isClickable: true,
+                onPressed: () => AuthService.logOut(),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:covid_app/models/user_model.dart';
+import 'package:covid_app/providers/doctor_provider.dart';
 import 'package:covid_app/providers/user_profile_provider.dart';
 import 'package:covid_app/screens/confirmation_screen.dart';
 import 'package:covid_app/screens/splash_screen.dart';
@@ -31,6 +32,9 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<UserProfileProvider>(
           create: (context) => UserProfileProvider(),
         ),
+        ChangeNotifierProvider<DoctorProvider>(
+          create: (context) => DoctorProvider(),
+        )
       ],
       child: OverlaySupport(
         child: MaterialApp(
