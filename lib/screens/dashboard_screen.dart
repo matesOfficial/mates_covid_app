@@ -1,5 +1,6 @@
 import 'package:covid_app/constants/image_constants.dart';
 import 'package:covid_app/screens/blood_donation_form_screen.dart';
+import 'package:covid_app/screens/consultation/consulting_bridge.dart';
 import 'package:covid_app/screens/plasma_donation_form_screen.dart';
 import 'package:covid_app/screens/search_blood_donor_screen.dart';
 import 'package:covid_app/screens/search_plasma_donor_screen.dart';
@@ -148,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('This feature is coming soon!.'),
@@ -175,11 +176,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         )),
                   ),
                   GestureDetector(
-                    onTap: (){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('This feature is coming soon!.'),
-                          backgroundColor: Colors.green,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConsultancyBridge(),
                         ),
                       );
                     },
