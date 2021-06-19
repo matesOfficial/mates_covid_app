@@ -98,7 +98,7 @@ class FirestoreDatabaseService {
             .where(donorType, isEqualTo: true)
             .where("city", isEqualTo: city)
             .orderBy(timestampType, descending: false)
-            .limit(4)
+            .limit(DONORS_LIST_PAGINATION_LIMIT)
             .get();
       }
       if (city == null && state != null) {
@@ -175,5 +175,136 @@ class FirestoreDatabaseService {
  static Future<void> updatePharmacyInfo(PharmacyModel pharmacyModel){
    return FirebaseFirestore.instance.collection("pharmacies").add(pharmacyModel.toJson());
  }
+/// Get phsrmscy list
+ static Future<QuerySnapshot> getPharmacyList({
+  String city,
+   String state,
+   DocumentSnapshot lastDocument
+}){
+   if (lastDocument == null) {
+     if (city != null && state == null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("city", isEqualTo: city)
+           .limit(DONORS_LIST_PAGINATION_LIMIT)
+           .get();
+     }
+     if (city == null && state != null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("state", isEqualTo: state)
+           .limit( DONORS_LIST_PAGINATION_LIMIT )
+           .get();
+     } else if (city != null && state != null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("city", isEqualTo: city)
+           .where("state", isEqualTo: state)
+           .limit( DONORS_LIST_PAGINATION_LIMIT )
+           .get();
+     }
+     return FirebaseFirestore.instance
+         .collection('pharmacies')
+         .limit( DONORS_LIST_PAGINATION_LIMIT )
+         .get();
+
+   } else {
+     if (city != null && state == null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("city", isEqualTo: city)
+           .startAfterDocument(lastDocument)
+           .limit(DONORS_LIST_PAGINATION_LIMIT)
+           .get();
+     }
+     if (city == null && state != null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("state", isEqualTo: state)
+           .startAfterDocument(lastDocument)
+           .limit(DONORS_LIST_PAGINATION_LIMIT)
+           .get();
+     } else if (city != null && state != null) {
+       return FirebaseFirestore.instance
+           .collection('pharmacies')
+           .where("city", isEqualTo: city)
+           .where("state", isEqualTo: state)
+           .startAfterDocument(lastDocument)
+           .limit(DONORS_LIST_PAGINATION_LIMIT)
+           .get();
+     }
+     return FirebaseFirestore.instance
+         .collection('pharmacies')
+         .startAfterDocument(lastDocument)
+         .limit(DONORS_LIST_PAGINATION_LIMIT)
+         .get();
+   }
+ }
+/// Get doctors list
+  static Future<QuerySnapshot> getDoctorsList({
+    String city,
+    String state,
+    DocumentSnapshot lastDocument
+  }){
+    if (lastDocument == null) {
+      if (city != null && state == null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("city", isEqualTo: city)
+            .limit(DONORS_LIST_PAGINATION_LIMIT)
+            .get();
+      }
+      if (city == null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("state", isEqualTo: state)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      } else if (city != null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("city", isEqualTo: city)
+            .where("state", isEqualTo: state)
+            .limit( DONORS_LIST_PAGINATION_LIMIT )
+            .get();
+      }
+      return FirebaseFirestore.instance
+          .collection('doctors')
+          .limit( DONORS_LIST_PAGINATION_LIMIT )
+          .get();
+
+    } else {
+      if (city != null && state == null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("city", isEqualTo: city)
+            .startAfterDocument(lastDocument)
+            .limit(DONORS_LIST_PAGINATION_LIMIT)
+            .get();
+      }
+      if (city == null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("state", isEqualTo: state)
+            .startAfterDocument(lastDocument)
+            .limit(DONORS_LIST_PAGINATION_LIMIT)
+            .get();
+      } else if (city != null && state != null) {
+        return FirebaseFirestore.instance
+            .collection('doctors')
+            .where("city", isEqualTo: city)
+            .where("state", isEqualTo: state)
+            .startAfterDocument(lastDocument)
+            .limit(DONORS_LIST_PAGINATION_LIMIT)
+            .get();
+      }
+      return FirebaseFirestore.instance
+          .collection('doctors')
+          .startAfterDocument(lastDocument)
+          .limit(DONORS_LIST_PAGINATION_LIMIT)
+          .get();
+    }
+  }
+
 
 }

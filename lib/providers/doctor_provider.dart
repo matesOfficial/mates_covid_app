@@ -1,12 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:covid_app/models/doctor_model.dart';
 import 'package:covid_app/services/database_service.dart';
 import 'package:flutter/material.dart';
 
 class DoctorProvider extends ChangeNotifier {
   DoctorModel doctorModel = new DoctorModel();
+  DocumentSnapshot _lastDocument;
+  bool _hasMore = true;
+  List<DoctorModel> doctorsList =  List<DoctorModel>.empty(growable: true);
+  // private variable to fetch data of donors.
+  bool _isGettingDoctorListData = false;
 
-  void resetProvider() {
+  // Getter for get donors list loading variable
+  bool get isGettingDoctorListData => _isGettingDoctorListData;
+
+
+  void resetProvider(){
     this.doctorModel = DoctorModel();
+    this.doctorsList = [];
   }
 
   void updateName(String name) {
@@ -67,6 +78,33 @@ class DoctorProvider extends ChangeNotifier {
     }
     return true;
   }
+
+  /// Get donor list data
+  Future<void> getDoctorsListData(String city, String state) async {
+    _isGettingDoctorListData = true;
+    QuerySnapshot snapshot = await FirestoreDatabaseService.getDoctorsList(
+        city: city,
+        state: state,
+        lastDocument: _lastDocument
+    );
+    _hasMore = snapshot.docs != null && snapshot.docs.length != 0;
+    if (_hasMore == false) {
+      print("no documents");
+      _isGettingDoctorListData = false;
+      notifyListeners();
+      return;
+    }
+    doctorsList.addAll(
+        snapshot.docs.map((e) => DoctorModel.fromJson(e.data()))
+    );
+    _lastDocument = snapshot.docs.last;
+    _isGettingDoctorListData = false;
+    notifyListeners();
+  }
+
+
+
+
 
   /// upload doctor model to database  
   Future<void> updateDoctorInfo () => FirestoreDatabaseService.updateDoctorInfo(doctorModel);
