@@ -113,10 +113,10 @@ class _SearchPlasmaDonorScreenState extends State<SearchPlasmaDonorScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Plasma Donors"),
-        ),
+        // appBar: AppBar(
+        //   centerTitle: true,
+        //   title: Text("Plasma Donors"),
+        // ),
         body: SingleChildScrollView(
           controller: _scrollController,
           child: Column(

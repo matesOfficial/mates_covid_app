@@ -22,10 +22,12 @@ class ThemeUtils {
           ),
         ),
       ),
+
       floatingActionButtonTheme:
           FloatingActionButtonThemeData(backgroundColor: primaryColor),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: primaryColor,
         elevation: 5.0,
         unselectedIconTheme: IconThemeData(color: Colors.grey[600]),
       ),
