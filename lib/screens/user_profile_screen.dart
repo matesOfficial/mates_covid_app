@@ -1,4 +1,5 @@
 import 'package:covid_app/providers/user_profile_provider.dart';
+import 'package:covid_app/screens/loading_screen.dart';
 import 'package:covid_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_app/widgets/profile_info_tile.dart';
@@ -11,6 +12,9 @@ class UserProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
         final UserProfileProvider userProfileProvider = Provider.of<UserProfileProvider>(context);
     // TODO Change font-sizes in style.dart
+     if(userProfileProvider.isUserStreamLoading){
+       return LoadingScreen();
+     }
     // Header starts here.
     return Scaffold(
       appBar: AppBar(
